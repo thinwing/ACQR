@@ -1,0 +1,26 @@
+from .figure_alpha_coverage import alpha_coverage
+from .figure_alpha_coverage import alpha_error
+
+from .figure_coverage_online import comp_proposed_coverage
+from .figure_coverage_online import comp_proposed_coverage_both
+
+from .figure_observation import fig
+from .figure_observation import fig_range
+
+
+from .figure_range_error_online import comp_proposed_coverage_db
+from .figure_range_error_online import comp_proposed_range_ave
+
+from .figure_gamma_coverage import gamma_coverage
+from .figure_gamma_coverage import gamma_error
+
+from .figure_gamma_coverage_online import comp_proposed_coverage as comp_proposed_coverage_gamma
+from .figure_gamma_coverage_online import comp_proposed_coverage_db as comp_proposed_coverage_gamma_db
+
+from .figure_range_error_gamma_online import comp_proposed_coverage_db as comp_proposed_coverage_db_gamma
+
+from .figure_alpha_coverage_outlier import outlier_coverage as out_cov
+from .figure_alpha_coverage_outlier import outlier_error as out_err
+
+from .figure_range_error_gamma_online_gamma import comp_proposed_coverage_db as comp_proposed_coverage_db_gamma_online
+from .figure_gamma_coverage_online_gamma import comp_proposed_coverage as comp_proposed_coverage_gamma_online
