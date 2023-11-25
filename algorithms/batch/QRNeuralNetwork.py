@@ -2,10 +2,10 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense, Dropout
+from tensorflow.python.keras.optimizers import adam_v2
+from tensorflow.python.keras.callbacks import EarlyStopping
 import tensorflow as tf
 # import tensorflow_addons as tfa
 
@@ -50,7 +50,7 @@ class QRNN():
     def pre_learning(self):
         ## Lower case
         # model
-        self.optimizer = Adam(self.lr)
+        self.optimizer = adam_v2(self.lr)
 
         self.model0 = Sequential()
         self.model0.add(Dense(self.num_hidden_layer, input_dim=self.input_dim, activation=self.activation))
@@ -70,7 +70,7 @@ class QRNN():
 
         ## Higher case
         # model
-        self.optimizer = Adam(self.lr)
+        self.optimizer = adam_v2(self.lr)
 
         self.model1 = Sequential()
         self.model1.add(Dense(self.num_hidden_layer, input_dim=self.input_dim, activation=self.activation))
@@ -95,15 +95,3 @@ class QRNN():
         result = np.vstack((lower.T, higher.T))
 
         return result
-
-
-
-
-
-
-
-
-
-
-
-

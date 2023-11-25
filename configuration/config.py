@@ -3,6 +3,7 @@ import numpy as np
 
 optimize_flag = 'custom'
 data_flag = 'off'
+onlyCOQKRflag = 'off'
 onlyACIflag = 'off'
 # num_divide = 3
 
@@ -13,7 +14,9 @@ limit = 1
 input_dim = 1
 output_dim = 1
 # Iter = 20000
-Iter = 2000 # figure
+Iter = 3000 # figure
+#Iter_a = 2000
+#Iter_b = 1000
 Iter_batch = 100
 trial = 1
 outlier_rate_temp = np.arange(6) * 0.02
@@ -36,7 +39,8 @@ outlier_rate_single = 0.04
 #--------- algorithms ---------#
 num_estimator = 1000
 max_depth = 10
-num_split = 5
+#num_split = 5
+num_split = 0
 
 ## Quantile Regression Neural Network
 num_hidden_layer = 64
@@ -53,7 +57,7 @@ sigma_rbf = 0.1
 
 ## Gradient methods
 
-step_size = 1
+step_size = 0.1
 # step_size = 0.01
 coherence = 10.0
 num_rff = 50 # no meaning

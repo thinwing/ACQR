@@ -34,7 +34,6 @@ class Kernel():
                 self.dict = self.dict.reshape(-1, self.input_dim)
     
         self.dict_num = len(self.dict)
-        print(self.dict_num)
 
         # print('Dictionary Size = ' + str(self.dict_num * self.multi) )
 
@@ -83,5 +82,3 @@ class RFF(Kernel):
                 kernel_vector_test[:, i] = np.sqrt(2 / self.num_rff) * np.cos((self.dict[:,0] * input[i]) + self.dict[:, -1])
 
         return kernel_vector_test
-
-    

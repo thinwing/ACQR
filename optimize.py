@@ -19,6 +19,7 @@ def gt(data_path, observation, noise, data, alpha):
    
 class base_learning():
     def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate):
+    #def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate, observation_c, data_c):
         # Data LOADING
         self.output_train = observation['output_train']
         self.output_test = observation['output_test']
@@ -32,6 +33,9 @@ class base_learning():
         self.output_test_noise = observation['output_test_noise']
 
         self.noise_max = noise['noise_test']
+
+        #self.output_c = observation_c['output_test']
+        #self.input_c = data_c['input_test']
         
         self.alpha = alpha
         self.Iter = len(self.output_test)
@@ -105,9 +109,8 @@ class online_learning(base_learning):
 
         else:
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter, kernel_vector=self.kernel_vector, kernel_vector_eval=self.kernel_vector_eval, output_train=self.output_train)
-            self.func_est = gd.learning(step_size=config.step_size)
-            print('size')
-            print([len(v) for v in self.func_est])
+            self.func_est = gd.learning(step_size=config.step_size)[0]
+            self.kernel_weight = gd.learning(step_size=config.step_size)[1]
             self.func_est_final = self.func_est[:, - 1, :]
             self.Iter = gd.Iter
 
@@ -116,6 +119,35 @@ class online_learning(base_learning):
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final)
+
+    #def CQR(self, data_c, observation_c):
+        #self.output_c = observation_c['output_test']
+        #self.input_c = data_c['input_test']
+        #ol_c = eval(self.method['method'])(input=self.input_c, dict_band=self.method['dict_band'])        
+        #ol_c.dict_define(self.method['variable'])
+        #self.calib_vector = ol_c.kernel_vector(self.input_c)
+
+        #self.func_calib = np.zeros([len(self.alpha), 1, len(self.output_train)])
+        #for i in range(self.Iter):        
+            # Pinball Moreau
+        #for a in range(len(self.alpha)):
+        #    self.func_calib[a,:,:] = np.dot(self.kernel_weight[a].T, self.calib_vector)
+        #self.func_low_c = self.func_calib[0].T
+        #self.func_high_c = self.func_calib[1].T
+        #self.scores_c = np.maximum(self.output_c - self.func_high_c.reshape(-1, 1), self.func_low_c.reshape(-1, 1) - self.output_c)
+        #self.confQuantAdapt_c = np.percentile(self.scores_c, config.alpha_range * 100)
+        #self.X_c = np.full([len(self.scores_c), 1], self.confQuantAdapt_c)
+        #self.higher_c = self.func_high_c.reshape(-1, 1) + self.X_c.reshape(-1, 1)
+        #self.lower_c = self.func_low_c.reshape(-1, 1) - self.X_c.reshape(-1, 1)
+        #self.coverage_h_c = np.where((self.higher_c - self.output_c > 0), 1, 0)
+        #self.coverage_l_c = np.where((self.lower_c - self.output_c > 0), 1, 0)
+        #XX = np.sum(self.coverage_h_c - self.coverage_l_c)
+        #scores = self.confQuantAdapt_c
+        #print('A')
+        #print(scores)
+        #print('B')
+
+        #return XX, scores    
 
 
 # TEST

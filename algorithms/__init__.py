@@ -1,5 +1,6 @@
 from .batch.QRNeuralNetwork import QRNN
 from .batch.QuantileRandomForest import QRF
+#from .batch.QuantileRandomForest2 import QRF2
 from .batch.QRKernel import KQR
 from .batch.primal_dual_batch import batch_learning_primal as primal_batch
 
@@ -14,3 +15,4 @@ from .evaluation.error import range_error as error
 from .evaluation.ground_truth import groundandsame as ground_truth
 
 __all__ = ['QRNN', 'QRF', 'KQR', 'grad', 'Kernel', 'RFF', 'coverage', 'error', 'ground_truth', 'primal', 'primal_batch']
+#__all__ = ['QRNN', 'QRF', 'QRF2', 'KQR', 'grad', 'Kernel', 'RFF', 'coverage', 'error', 'ground_truth', 'primal', 'primal_batch']

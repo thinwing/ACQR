@@ -17,7 +17,7 @@ class RandomForestQuantileRegressor(RandomForestRegressor):
             per_tree_pred = [pred.predict(X) for pred in self.estimators_]
             predictions = np.stack(per_tree_pred)
             predictions.sort(axis=0)
-            return predictions[int(round(len(per_tree_pred) * quantile)), :]
+            return predictions[int(np.round(len(per_tree_pred) * quantile)), :]
             
             # result = np.quantile(predictions, quantile, axis=0).reshape(-1)
             # return result
@@ -33,10 +33,10 @@ class QRF():
     def pre_learning(self):
         self.lower = []
         self.upper = []
-            
     
     def predict(self, input_test, num_split=num_split, num_estimator=num_estimator, max_depth=max_depth):
         self.output_train = self.output_train.reshape(-1)
+        self.input_test = input_test
         if num_split > 0:
             # kf = KFold(n_splits=num_split, shuffle=True, random_state=0)
             kf = KFold(n_splits=num_split)
@@ -47,18 +47,17 @@ class QRF():
                 x_train, y_train, x_test, y_test = (self.input_train[train_index], self.output_train[train_index], self.input_train[test_index], self.output_train[test_index]) 
                
                 rfqr.fit(x_train, y_train)
-                
                 self.lower = np.concatenate((self.lower, rfqr.predict(x_test, quantile=self.alpha[0]))) 
                 self.upper = np.concatenate((self.upper, rfqr.predict(x_test, quantile=self.alpha[1])))
-
+                
         else:            
             # rfqr.fit(input_sort, output_test)
             rfqr = RandomForestQuantileRegressor(random_state=0, n_estimators=int(num_estimator), min_samples_leaf=1, min_samples_split=2, max_samples=0.01, max_depth=max_depth)
     
             rfqr.fit(self.input_train, self.output_train)
             
-            self.lower = rfqr.predict(self.input_train, quantile=self.alpha[0])
-            self.upper = rfqr.predict(self.input_train, quantile=self.alpha[1])
+            self.lower = rfqr.predict(self.input_test, quantile=self.alpha[0])
+            self.upper = rfqr.predict(self.input_test, quantile=self.alpha[1])
         
         result = np.vstack((self.lower.T, self.upper.T)).reshape(2, -1)
                 

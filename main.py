@@ -8,7 +8,7 @@ import configuration.config as config
 import configuration.graph_config as graph_config
 import configuration.address as address
 
-
+from os import makedirs as mkdir
 import numpy as np
 
 # data 
@@ -32,6 +32,10 @@ if config.data_flag == 'on':
                 for i in range(config.trial):
                     data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i + 1)
                     dt.dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_type=noise_type, outlier_type=outlier_type, outlier_rate=outlier_rate)
+
+with open('log.txt', 'w') as f:
+    f.write('start')
+    f.write('\n---------------------------------------------')
 
 if config.optimize_flag == 'all':
     for noise_type in config.noise_type_all:
@@ -68,9 +72,9 @@ elif config.optimize_flag == 'custom':
     for noise_type in config.noise_types:
         for outlier_type in config.outlier_types:
             #for outlier_rate in config.outlier_rate:
-                outlier_rate = 0.1
-                with open('log.txt', 'w') as f:
-                    f.write('noise_type : ' + str(noise_type))
+                outlier_rate = 0.04
+                with open('log.txt', 'a') as f:
+                    f.write('\n' + 'noise_type : ' + str(noise_type))
                     f.write('\noutlier_type : ' + str(outlier_type))
                     f.write('\noutlier_rate : ' + str(outlier_rate))
                     f.write('\n---------------------------------------------')
@@ -103,6 +107,12 @@ elif config.optimize_flag == 'custom':
                             elif eval('address.' + str(method))['processing'] == 'online':
                                 learn = optimize.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
                                 grd_truth = optimize.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                data_path_temp = data_path
+                                data_path ='truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1)  
+                                mkdir(data_path, exist_ok=True)
+                                data_path = data_path + '/grd_truth.npz'
+                                np.savez_compressed(data_path, grd_truth)
+                                data_path = data_path_temp
                                 learn.pre_learning()
                                 for loss_temp in config.losses:
                                     if str(loss_temp) == 'pinball':
@@ -119,16 +129,20 @@ elif config.optimize_flag == 'custom':
                                             learn.learning(loss=loss)
                                             learn.eval(ground_truth=grd_truth)
                                             learn.save()
+                                            now = datetime.datetime.now()
+                                            with open('log.txt', 'a') as f:
+                                                f.write('\n' +'gamma = ' + str(gamma))
+                                                f.write('\n' + '\t' + str(i + 1) + ' / ' + str(config.trial) + ' : ' + str(now))
+                                                f.write('\n' + '\t\tCoverage rate = ' + str((learn.coverage[1] - learn.coverage[0])[-1]))
                             else:
                                 print('ERROR: You should choose a method correctly.')
 
-                            now = datetime.datetime.now()
-                            with open('log.txt', 'a') as f:
-                                f.write('\n' + '\t' + str(i + 1) + ' / ' + str(config.trial) + ' : ' + str(now))
-                                f.write('\n' + '\t\tCoverage rate = ' + str((learn.coverage[1] - learn.coverage[0])[-1]))
-                            print(str((learn.coverage[1] - learn.coverage[0])))
-                            print(str((learn.coverage[1] - learn.coverage[0])[-1]))
-
+                            #now = datetime.datetime.now()
+                            #with open('log.txt', 'a') as f:
+                                #f.write(str(gamma))
+                                #f.write('\n' + '\t' + str(i + 1) + ' / ' + str(config.trial) + ' : ' + str(now))
+                                #f.write('\n' + '\t\tCoverage rate = ' + str((learn.coverage[1] - learn.coverage[0])[-1]))
+                            
                         if eval('address.' + str(method))['processing'] == 'batch':
                             integrate(data_path=learn.data_path_temp, method=str(method), loss=False, gamma=False, trial=config.trial)        
             
@@ -140,27 +154,6 @@ elif config.optimize_flag == 'custom':
                                     for gamma in config.gamma:
                                         integrate(data_path=learn.data_path_temp, method=str(method), loss=loss_temp, gamma=gamma, trial=config.trial)   
 
-                    func_est_final = learn.func_est_final.T
-                    func_low = func_est_final[:,0]
-                    func_high = func_est_final[:,1]
-                    print(func_high.reshape(-1, 1))
-                    scores = np.maximum(learn.output_train - func_high.reshape(-1, 1), func_low.reshape(-1, 1) - learn.output_train)
-                    confQuantAdapt = np.percentile(scores, config.alpha_range * 100)
-                    X = np.full([len(scores), 1], confQuantAdapt)
-                    higher = func_high.reshape(-1, 1) + X.reshape(-1, 1)
-                    print(X.reshape(-1, 1))
-                    print(higher)
-                    lower = func_low.reshape(-1, 1) - X.reshape(-1, 1)
-                    coverage_h = np.where((higher - learn.output_test > 0), 1, 0)
-                    coverage_l = np.where((lower - learn.output_test > 0), 1, 0)
-                    XX = np.sum(coverage_h - coverage_l)
-                    print(XX)
-                    covlen = str(XX/config.Iter)
-                    with open('log.txt', 'a') as f:
-                        f.write('\n---------------------------------------------')
-                        f.write('\n' + '\t\tCQR Coverage rate = ' + str(covlen))
-
-                        
                     with open('log.txt', 'a') as f:
                         f.write('\n---------------------------------------------')
                         f.write('END')

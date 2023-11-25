@@ -1,6 +1,7 @@
 import graph
 import data as dt
-import optimize
+import optimize_ACI 
+import datetime
 from integrate import data_integrate as integrate
 from ACI import runACI
 import csv
@@ -23,30 +24,45 @@ if config.onlyACIflag == 'on':
                     data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i + 1)
                     dt.dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_type=noise_type, outlier_type=outlier_type, outlier_rate=outlier_rate)
 
+with open('log2.txt', 'w') as f:
+    f.write('start')
+    f.write('\n---------------------------------------------')
 for noise_type in config.noise_types:
     for outlier_type in config.outlier_types:
-        for outlier_rate in config.outlier_rate:
-            with open('log2.txt', 'w') as f:
-                f.write('noise_type : ' + str(noise_type))
-                f.write('\noutlier_type : ' + str(outlier_type))
-                f.write('\noutlier_rate : ' + str(outlier_rate))
+        #for outlier_rate in config.outlier_rate:
+        outlier_rate = 0.04
+        with open('log2.txt', 'a') as f:
+            f.write('\nnoise_type : ' + str(noise_type))
+            f.write('\noutlier_type : ' + str(outlier_type))
+            f.write('\noutlier_rate : ' + str(outlier_rate))
+            f.write('\n---------------------------------------------')
+        
+        for index_alpha, alpha in enumerate(alpha_all):
+            with open('log2.txt', 'a') as f:
+                f.write('\n---------------------------------------------')
+                f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                 f.write('\n---------------------------------------------')
 
-            
-            for index_alpha, alpha in enumerate(alpha_all):
+            for i in range(config.trial):
+                data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
+                observation = np.load(data_path + 'outlier.npz')
+                noise = np.load(data_path + 'noise.npz')
+                data = np.load(data_path + 'data.npz')
+                ACI_data = runACI(output=observation['output_test'], input=data['input_test'], alpha=alpha_all, alpha_range=alpha_range, step=0.005, tinit=1000, splitSize=0.5)
+                coverage = ACI_data[0]
+                func_est_final = ACI_data[1]
+                now = datetime.datetime.now()
+                data_path_temp = data_path
+                data_path = 'truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
+                grd_truth = np.load(data_path + 'grd_truth.npz')
+                data_path = data_path_temp
+                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
+                learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final)
+                learn.save_ACI()
                 with open('log2.txt', 'a') as f:
-                    f.write('\n---------------------------------------------')
-                    f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
-                    f.write('\n---------------------------------------------')
-
-                for i in range(config.trial):
-                    data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
-                    observation = np.load(data_path + 'outlier.npz')
-                    noise = np.load(data_path + 'noise.npz')
-                    data = np.load(data_path + 'data.npz')
+                    f.write('\n' + '\t' + str(i + 1) + ' / ' + str(config.trial) + ' : ' + str(now))
+                    f.write('\n' + '\t\tCoverage rate = ' + str(coverage))
                                 
-        runACI(output=observation['output_test'], input=data['input_test'], alpha=alpha_all, alpha_range=alpha_range, step=0.005, tinit=1900, splitSize=0.2)
-
         with open('log2.txt', 'a') as f:
             f.write('\n---------------------------------------------')
             f.write('END')

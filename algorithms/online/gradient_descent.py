@@ -11,6 +11,9 @@ class online_learning():
         self.output_train = output_train
         
     def learning(self, step_size):
+        print(len(self.kernel_vector))
+        print('self.Iter')
+        print(self.Iter)
         kernel_weight = np.zeros([len(self.alpha), len(self.kernel_vector), 1])
         kernel_func = np.zeros([len(self.alpha), self.Iter, len(self.output_train)])
         
@@ -20,6 +23,4 @@ class online_learning():
                 kernel_weight[a] = updating(output=self.output_train[i], kernel_vector=self.kernel_vector[:, i], step_size=step_size, alpha=self.alpha[a], kernel_weight=kernel_weight[a], loss=self.loss)
                 kernel_func[a, i] = np.dot(kernel_weight[a].T, self.kernel_vector_eval).reshape(-1)
                 
-        return kernel_func
-
-            
+        return kernel_func, kernel_weight

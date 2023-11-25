@@ -11,8 +11,6 @@ sys.path.append('../')
 from integrate import get_path
 from configuration import graph_config as grp
 
-
-
 def fig(data_path, list=np.array([['same_range'],['ground_truth']]), loss=False, gamma=False):
     # only : dim = 1
     # if you want to create another figure, please change trial number.

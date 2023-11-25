@@ -1,19 +1,20 @@
 import numpy as np
 import algorithms.batch.QRNeuralNetwork
-import datetime
+import configuration.config as config
 import tensorflow as tf
 import algorithms.evaluation.coverage
-import csv
+from algorithms.batch.QuantileRandomForest import QRF
 
 def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
     T = len(output)    
     alpha = alpha.T
     alphaTrajectory = np.zeros(T - tinit)
     adaptErrSeq = np.zeros(T - tinit)
-    hozon = np.zeros(T - tinit)
     alphat = alpha_range
+    coverage = 0.0
     
-    for t in range(tinit, T):
+    for t in range(tinit, int(T + 1)):
+        print(f"Done {t} time steps")
         trainPoints = np.random.choice(np.arange(t - 1), size=int(splitSize * (t - 1)), replace=False)
         calpoints = np.delete(np.arange(t - 1), trainPoints)
         Xtrain = input[trainPoints, :]
@@ -23,11 +24,16 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
 
         # Fit quantile regression on the training set
         
-        QR = algorithms.batch.QRNeuralNetwork.QRNN(alpha=alpha, input_train=Xtrain, output_train=Ytrain)
-        QR.__init__(alpha=alpha, input_train=Xtrain, output_train=Ytrain)
+        #QR = algorithms.batch.QRNeuralNetwork.QRNN(alpha=alpha, input_train=Xtrain, output_train=Ytrain)
+        #QR.__init__(alpha=alpha, input_train=Xtrain, output_train=Ytrain)
+        #QR.pre_learning()
+        #low = QR.predict(input_test=XCal)[0]
+        #high = QR.predict(input_test=XCal)[1]
+        QR = QRF(alpha=alpha, input_train=Xtrain, output_train=Ytrain)
         QR.pre_learning()
-        low = QR.predict(input_test=XCal)[0]
-        high = QR.predict(input_test=XCal)[1]
+        QRcal = QR.predict(input_test=XCal, num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)
+        low = QRcal[0]
+        high = QRcal[1]
         lower = low.reshape(-1, 1)
         higher = high.reshape(-1, 1)        
         scores = np.maximum(YCal - higher, lower - YCal)
@@ -50,8 +56,8 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
         #predUpForCal = np.dot(np.hstack((ones, XCal)), Low_Array)
         #scores = np.maximum(YCal - higher, lower - YCal)
 
-        low = QR.predict([input[t]])[0]
-        high = QR.predict([input[t]])[1]        
+        low = QR.predict(input_test=[input[t]], num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[0]
+        high = QR.predict(input_test=[input[t]], num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[1]        
         lower = low.reshape(-1, 1) - confQuantAdapt
         higher = high.reshape(-1, 1) + confQuantAdapt
         newScore = max(output[t] - higher, lower - output[t])
@@ -68,22 +74,15 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
         
         alphat += step * (adaptErrSeq[t - tinit] - 1 + alpha_range)
 
-        now = datetime.datetime.now()
+        if t >= (T + 1 - tinit):
+            print(adaptErrSeq[t - tinit])
+            coverage = coverage + adaptErrSeq[t - tinit]/tinit
+        #covlen = (np.where((scores <= 0), 1, 0))
+        #print(t)
+        #print(covlen)
+        #Covrate = (np.sum(covlen) + int(newScore <= 0))/(t - len(trainPoints))
+    
+    func_est_final = np.hstack((lower, higher)).T
+    coverage = 1 - coverage 
 
-        covlen = (np.where((scores <= 0), 1, 0))
-        print(t)
-        print(covlen)
-        Covrate = (np.sum(covlen) + int(newScore <= 0))/(t - len(trainPoints))
-        with open('log2.txt', 'a') as f:
-            f.write('\n' + '\t' + str(t) + ' / ' + str(T) + ' : ' + str(now))
-            f.write('\n' + '\t\tCoverage rate = ' + str(Covrate))
-            hozon[t - tinit] = str(Covrate) 
-
-            tf.print(f"Done {t} time steps")
-
-    with open('sample_writer_row.csv', 'w') as f:
-        writer = csv.writer(f, lineterminator='\n')
-        for i in hozon:
-            writer.writerow([i])
-
-    return alphaTrajectory, adaptErrSeq
+    return coverage, func_est_final
