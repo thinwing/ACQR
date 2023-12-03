@@ -6,6 +6,10 @@ from .figure_coverage_online import comp_proposed_coverage_both
 
 from .figure_observation import fig
 from .figure_observation import fig_range
+from .figure_observation2 import figACI
+from .figure_observation2 import fig_rangeACI
+from .figure_observation2 import figCQR
+from .figure_observation2 import fig_rangeCQR
 
 
 from .figure_range_error_online import comp_proposed_coverage_db

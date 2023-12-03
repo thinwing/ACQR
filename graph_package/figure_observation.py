@@ -33,6 +33,8 @@ def fig(data_path, list=np.array([['same_range'],['ground_truth']]), loss=False,
     fig_size = np.array([12, 8])
     
     list_flatten = list.flatten()
+    print('flat')
+    print(list_flatten)
     
     # ground_truth_path, _ = get_path(data_path=data_path, method='ground_truth')
     
@@ -48,6 +50,7 @@ def fig(data_path, list=np.array([['same_range'],['ground_truth']]), loss=False,
         plt.rcParams['text.usetex'] = True
     
         ax = fig.add_subplot(1, 1, 1)
+        print(item)
     
         # get the path
         data_path_detail, _= get_path(data_path=data_path, method=item, loss=loss, gamma=gamma)
@@ -65,7 +68,9 @@ def fig(data_path, list=np.array([['same_range'],['ground_truth']]), loss=False,
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('$x$', fontsize=grp.font_size)
         ax.set_ylabel('$y$', fontsize=grp.font_size)
-        ax.set_ylim(-2, 5)
+        
+        #調整しましょう
+        ax.set_ylim(-5, 5)
         ax.set_xlim(0, 1)
         
         ax.legend(fontsize=32)
@@ -85,6 +90,7 @@ def fig_range(data_path, list=np.array([['same_range'],['ground_truth']]), loss=
     # if you want to create another figure, please change trial number.
     
     # data install 
+    print(data_path)
     data_path_temp = data_path + '/base/exp_data.npz'
     data = np.load(data_path_temp)
     
@@ -122,6 +128,8 @@ def fig_range(data_path, list=np.array([['same_range'],['ground_truth']]), loss=
         
         # load the data
         method = np.load(data_path_detail)
+        print('method')
+        print(method['func_est'])
         method_func = (method['func_est'])[:, input_test_ord]
         
         range_est = method_func[1] - method_func[0]
@@ -136,7 +144,7 @@ def fig_range(data_path, list=np.array([['same_range'],['ground_truth']]), loss=
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('x', fontsize=grp.font_size)
         ax.set_ylabel('Range', fontsize=grp.font_size)
-        ax.set_ylim(0, 5)
+        #ax.set_ylim(0, 5)
         
         # plt.tick_params(labelsize=grp.ticks)
         ax.legend(fontsize=16)

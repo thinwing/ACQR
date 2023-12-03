@@ -2,6 +2,7 @@ import graph
 import data as dt
 import optimize
 import Optimize_CQR
+import Optimize_CQR2
 from integrate import data_integrate as integrate
 from integrate import data_integrate_CQR as integrate_CQR
 from algorithms.online.gradient_descent import online_learning as grad
@@ -114,6 +115,8 @@ elif config.optimize_flag == 'custom':
                             elif eval('address.' + str(method))['processing'] == 'online':
                                 learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
                                 grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                #learn = Optimize_CQR2.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                #grd_truth = Optimize_CQR2.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 learn.pre_learning()
                                 for loss_temp in config.losses:
                                     if str(loss_temp) == 'pinball':

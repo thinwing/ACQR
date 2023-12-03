@@ -45,7 +45,7 @@ def comp_proposed_coverage_both(data_path, list, loss=False, gamma=False):
 
             ax[index].set_xlabel('Iteration',fontsize=grp.font_size)
             ax[index].set_ylabel('Quantile')
-            ax[index].set_ylim(0, 1)
+            #ax[index].set_ylim(0, 1)
 
             ax[index].grid()
             ax[index].legend(fontsize=grp.font_size)
@@ -68,43 +68,47 @@ def comp_proposed_coverage(data_path, list, loss=False, gamma=False):
     list_flatten = list.flatten()
     iteration = np.arange(config.Iter)
     range_alpha = config.range_alpha
+    print('range_alpha')
+    print(range_alpha)
     
-    for index_alpha, range_alpha_temp in enumerate(range_alpha):
-        ground_alpha = np.ones(config.Iter) * range_alpha_temp
+    range_alpha_temp = 0.95
+    ground_alpha = np.ones(config.Iter) * range_alpha_temp
+    
+    #fig = plt.figure(figsize=(12, 4))
+    fig, ax = plt.subplots(figsize=(12, 4))
+    plt.tick_params(labelsize=grp.ticks)
+    plt.rcParams['font.family'] = 'Times New Roman'    
+    plt.rcParams['text.usetex'] = True
+    #ax = fig.add_subplot(1, 1, 1)
+    ax.plot(iteration, ground_alpha, label='ground truth', color='black', linewidth=grp.linewidth, linestyle='dashdot')
+    data_path_alpha = data_path + '/alpha=' + str(range_alpha_temp)
+    
+    for _, item in enumerate(list_flatten):
+        print('data_path_alpha')
+        print(data_path_alpha)
+        data_path_detail, _ = get_path(data_path=data_path_alpha, method=item, loss=loss, gamma=gamma)
+                    
+        method = np.load(data_path_detail)
+        coverage_temp = method['coverage']
+        coverage = coverage_temp[1] - coverage_temp[0]
         
-        fig = plt.figure(figsize=(12, 4))
-        plt.tick_params(labelsize=grp.ticks)
-        plt.rcParams['font.family'] = 'Times New Roman'    
-        plt.rcParams['text.usetex'] = True
-        ax = fig.add_subplot(1, 1, 1)
-        ax.plot(iteration, ground_alpha, label='ground truth', color='black', linewidth=grp.linewidth, linestyle='dashdot')
-        data_path_alpha = data_path + '/alpha=' + str(range_alpha_temp)
-        
-        for _, item in enumerate(list_flatten):
+        ax.plot(iteration, coverage, label=eval('grp.' + str(item))['fig_name'], color=eval('grp.' + str(item))['color'], linewidth=grp.linewidth)
+    
+    ax.set_ylabel('Coverage', fontsize=grp.font_size)
+    ax.set_xlabel('Iteration', fontsize=grp.font_size)
+    ax.grid()
+    ax.legend(fontsize=grp.font_size)
+    #ax.set_ylim(0, 1)
 
-            data_path_detail, _ = get_path(data_path=data_path_alpha, method=item, loss=loss, gamma=gamma)
-                        
-            method = np.load(data_path_detail)
-            coverage_temp = method['coverage']
-            coverage = coverage_temp[1] - coverage_temp[0]
-            
-            ax.plot(iteration, coverage, label=eval('grp.' + str(item))['fig_name'], color=eval('grp.' + str(item))['color'], linewidth=grp.linewidth)
-        
-        ax.set_ylabel('Coverage', fontsize=grp.font_size)
-        ax.set_xlabel('Iteration', fontsize=grp.font_size)
-        ax.grid()
-        ax.legend(fontsize=grp.font_size)
-        ax.set_ylim(0, 1)
+    save_path_alpha = data_path_alpha.replace('text','graph')
+    if loss != False:
+        save_path_alpha = save_path_alpha.replace('/alpha=', '/' + str(loss) + '/alpha=')
+    mkdir(save_path_alpha, exist_ok=True)
 
-        save_path_alpha = data_path_alpha.replace('text','graph')
-        if loss != False:
-            save_path_alpha = save_path_alpha.replace('/alpha=', '/' + str(loss) + '/alpha=')
-        mkdir(save_path_alpha, exist_ok=True)
+    save_name = save_path_alpha + '/coverage.pdf'        
+    plt.savefig(save_name, bbox_inches='tight')        
+    plt.clf()
+    plt.close()
 
-        save_name = save_path_alpha + '/coverage.pdf'        
-        plt.savefig(save_name, bbox_inches='tight')        
-        plt.clf()
-        plt.close()
-
-        image_name = save_name.replace('pdf', 'png')
-        cv(save_name, image_name)
+    image_name = save_name.replace('pdf', 'png')
+    cv(save_name, image_name)

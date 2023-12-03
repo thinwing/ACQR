@@ -13,7 +13,7 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
     alphat = alpha_range
     coverage = 0.0
     
-    for t in range(tinit, int(T + 1)):
+    for t in range(tinit, T):
         print(f"Done {t} time steps")
         trainPoints = np.random.choice(np.arange(t - 1), size=int(splitSize * (t - 1)), replace=False)
         calpoints = np.delete(np.arange(t - 1), trainPoints)
@@ -38,7 +38,12 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
         higher = high.reshape(-1, 1)        
         scores = np.maximum(YCal - higher, lower - YCal)
         #コンフォーマル予測
-        confQuantAdapt = np.percentile(scores, alphat * 100)
+        if alphat >= 1:
+            confQuantAdapt = max(scores)
+        elif alphat <= 0:
+            confQuantAdapt = min(scores)
+        else:
+            confQuantAdapt = np.percentile(scores, alphat * 100)
         X = np.full([len(scores), 1], confQuantAdapt)
         higher = higher + X.reshape(-1, 1)
         lower = lower - X.reshape(-1, 1)
@@ -58,9 +63,9 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
 
         low = QR.predict(input_test=[input[t]], num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[0]
         high = QR.predict(input_test=[input[t]], num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[1]        
-        lower = low.reshape(-1, 1) - confQuantAdapt
-        higher = high.reshape(-1, 1) + confQuantAdapt
-        newScore = max(output[t] - higher, lower - output[t])
+        lower_n = low.reshape(-1, 1) - confQuantAdapt
+        higher_n = high.reshape(-1, 1) + confQuantAdapt
+        newScore = max(output[t] - higher_n, lower_n - output[t])
     
         if alphat >= 1:
             adaptErrSeq[t - tinit] = 0
@@ -74,7 +79,7 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
         
         alphat += step * (adaptErrSeq[t - tinit] - 1 + alpha_range)
 
-        if t >= (T + 1 - tinit):
+        if t >= (T - tinit):
             print(adaptErrSeq[t - tinit])
             coverage = coverage + adaptErrSeq[t - tinit]/tinit
         #covlen = (np.where((scores <= 0), 1, 0))

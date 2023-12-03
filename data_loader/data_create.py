@@ -14,7 +14,7 @@ def toy_data(input, center):
 
 def toy_datab(input, center):
     bandwidth = np.array([0.1, 0.3])
-    shift = np.array([-0.3])
+    shift = np.array([-0.4])
     output_true = 4 * (a + 0.1) * np.exp((-1) * np.sum((input + shift - center[0]) ** 2, axis=1) / (2 * (bandwidth[0] ** 2))) + 2 * (b + 0.1) * np.exp((-1) * np.sum((input + shift - center[1]) ** 2, axis=1) / (2 * (bandwidth[1] ** 2)))
     output_true = output_true.reshape(-1, 1) 
         

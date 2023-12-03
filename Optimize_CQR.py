@@ -168,4 +168,5 @@ class online_learning(base_learning):
         data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR' 
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
+        print(data_path)
         np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final)

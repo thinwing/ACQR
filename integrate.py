@@ -8,6 +8,7 @@ import scipy as sp
 import scipy.stats as st
 
 def get_path(data_path, method, loss=False, gamma=False):
+    print(eval('grp.' + str(method))['loss'])
     if eval('grp.' + str(method))['loss'] == 'None':
         data_path_add = '/' + str(eval('grp.' + str(method))['address']) 
         data_path_detail = data_path + data_path_add + '/' + str(eval('grp.' + str(method))['save_name']) + '.npz'
@@ -18,6 +19,8 @@ def get_path(data_path, method, loss=False, gamma=False):
             gamma = loss_dict['gamma']
         else:
             loss_dict = eval('grp.' + str(loss))
+        print('sutera')
+        print(loss_dict)
         data_path_add = '/' + str(eval('grp.' + str(method))['address']) + '/'  + str(loss_dict['loss']) + '/\u03b3=' + str(gamma)          
         data_path_detail = data_path + data_path_add + '/' + str(eval('grp.' + str(method))['save_name']) + '.npz'
     return data_path_detail, data_path_add
@@ -131,7 +134,7 @@ if __name__ == '__main__':
     for alpha_range_temp in range(config.limit):
         alpha_range = np.round(0.95 - (alpha_range_temp * 0.05), 3)
     
-        data_path =  'result/text/dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/Iter=' + str(config.Iter) + '/alpha=' + str(alpha_range) 
+        data_path =  'result/text/dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/Iter=' + str(config.Iter) + '/alpha=' + str(alpha_range)
 
         for _, method in enumerate(config.methods):
             data_integrate(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)    

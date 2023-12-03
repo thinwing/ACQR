@@ -54,7 +54,8 @@ for noise_type in config.noise_types:
                 now = datetime.datetime.now()
                 data_path_temp = data_path
                 data_path = 'truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
-                grd_truth = np.load(data_path + 'grd_truth.npz')
+                true = np.load(data_path + 'grd_truth.npz')
+                grd_truth = true['arr_0']
                 data_path = data_path_temp
                 learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final)

@@ -24,25 +24,17 @@ class ACIlearning():
         self.coverage_all = coverage
         self.grd_truth = ground_truth
         self.func_est_final = func_est_final
-        print("-----------------------------------")
-        num_div = int(len(self.coverage[0]) / 10)
-        print("coverage_")
-        for i in range(10):
-            print(self.coverage[0,i*num_div:i*num_div+5].reshape(1, -1))
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        for i in range(10):
-            print(self.coverage[1,i*num_div:i*num_div+5].reshape(1, -1))
 
         print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         print("coverage")
         for i in range(10):
-            print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
+            print(self.coverage)
         self.ACI = {'method':'Kernel', 'variable':config.coherence, 'dict_band':config.dict_band_multi, 'save_name':'multi_kernel', 'processing':'online'}
         self.loss = {'loss':'pinball_moreau', 'gamma':0.5}
         self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=self.grd_truth, Iter=self.Iter, method = self.ACI)
         print("-----------------------------------")
         print("error")
-        print(10 * np.log10(self.coverage_db[2, i*num_div:i*num_div+5]).reshape(1, -1))
+        print(10 * np.log10(self.coverage_db[2, 0:5]).reshape(1, -1))
         print(np.argmin(self.coverage_db[2]).reshape(1, -1))
         print(np.min(10 * np.log10(self.coverage_db[2])).reshape(1, -1))
 

@@ -3,7 +3,7 @@ import configuration.config as config
 
 range_alpha = np.array([0.95])
 
-loss_base = 'pmc_batch'
+loss_base = 'pinball_moreau'
 loss_all = ['pinball','pinball_moreau','pinball_huberized','pinball_smooth_relax', 'pmc_batch']
 
 # Methods
@@ -35,13 +35,13 @@ pmc_online = {'loss':'pmc_online', 'gamma':0.5, 'loss_name':'Pinballized MC', 'm
 pmc_batch = {'loss':'pmc_batch', 'gamma':50.0, 'loss_name':'Pinballized MC', 'marker':'v', 'color':['navy', 'aqua']}
 
 
-loss_list = np.array(['pmc_batch'])
+loss_list = np.array(['pinball_moreau'])
 
 # list for graph
 list_graph = np.array(['single_kernel'])
 list_graph_online = np.array(['single_kernel'])
 
-list_graph_coverage = np.array([ 'KQR', 'NN','single_kernel'])
+list_graph_coverage = np.array(['single_kernel'])
 
 
 # graph
@@ -59,9 +59,11 @@ dot_size = 6
 ## figure_alpha_coverage
 marker_size = 16
 title_coverage_db = ('range_error_alpha.png','error_low_alpha.png','error_high_alpha.png',)
-title_outlier_coverage_db = ('range_error_outlier.png','error_low_outlier.png','error_high_outlier.png',)
+#title_outlier_coverage_db = ('range_error_outlier.png','error_low_outlier.png','error_high_outlier.png',)
+title_outlier_coverage_db = ('range_error_outlier.pdf','error_low_outlier.pdf','error_high_outlier.pdf',)
 title_db = ('Range error [dB]', 'Quantile estimation error [dB]', 'Quantile estimation error [dB]')
-title_coverage_db_gamma = ('range_error_gamma.png','error_low_gamma.png','error_high_gamma.png',)
+#title_coverage_db_gamma = ('range_error_gamma.png','error_low_gamma.png','error_high_gamma.png',)
+title_coverage_db_gamma = ('range_error_gamma.pdf','error_low_gamma.pdf','error_high_gamma.pdf',)
 
 ## figure_online
 

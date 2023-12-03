@@ -14,7 +14,8 @@ limit = 1
 input_dim = 1
 output_dim = 1
 # Iter = 20000
-Iter = 3000 # figure
+Iter = 3000
+Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
 Iter_batch = 100
@@ -75,7 +76,8 @@ regular_pdm = np.array([0.0])
 # gamma = 100.0
 gamma = 10.0 ** (np.arange(4) - 1)
 # gamma_conditional = 0.1
-gamma_default = 50.0
+gamma_default = 100.0
+#gamma_default = 0.5
 
 dict_band_single = np.array([0.1])
 dict_band_multi = np.array([0.05, 0.1])
@@ -92,7 +94,7 @@ alpha_range = 0.95
 # methods
 # 'NN', 'QRF', 'single_kernel', 'single_rff', 'multi_kernel', 'multi_rff'
 method_all = ('NN', 'QRF', 'KQR', 'single_kernel', 'single_rff', 'multi_kernel', 'multi_rff',)
-method = 'multi_kernel'
+method = 'single_kernel'
 methods = ('single_kernel', )
 
 # Loss function
