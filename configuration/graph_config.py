@@ -38,7 +38,9 @@ pmc_batch = {'loss':'pmc_batch', 'gamma':50.0, 'loss_name':'Pinballized MC', 'ma
 loss_list = np.array(['pinball_moreau'])
 
 # list for graph
+# ここ超大事
 list_graph = np.array(['single_kernel'])
+#list_graph = np.array(['single_kernel'],['multi_kernel'])
 list_graph_online = np.array(['single_kernel'])
 
 list_graph_coverage = np.array(['single_kernel'])

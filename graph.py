@@ -11,7 +11,8 @@ class _graph():
         self.data_path = 'result/text/dim=' + str(input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) +'/outlier_rate=' + str(outlier_rate) +  '/Iter=' + str(Iter)
         print(self.data_path) 
 
-    def bo_figure(self, list, alpha, trial=10):
+#ここ変えた
+    def bo_figure(self, list, alpha, trial=1):
         # batch and online
         for trial_temp in range(trial):
             data_path = self.data_path + '/alpha=' + str(alpha) + '/trial=' + str(trial_temp + 1)
@@ -52,7 +53,7 @@ class _graph():
     
 if __name__ == '__main__':
     gr = _graph()
-    #gr.bo_figure(list=grp.list_graph, alpha=0.95)
+    gr.bo_figure(list=grp.list_graph, alpha=0.95)
 
     #gr.bo_coverage(list=grp.list_graph_coverage)    
     #for index, item in enumerate(grp.loss_list):
@@ -60,6 +61,6 @@ if __name__ == '__main__':
     #     # print(index + 1)
 
     #ここフォントの問題あり    
-    gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
+    #gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
     
     #gr.outlier_coverage(list=grp.list_graph_coverage)

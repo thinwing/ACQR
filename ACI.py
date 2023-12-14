@@ -87,7 +87,12 @@ def runACI(output, input, alpha, alpha_range, step, tinit, splitSize):
         #print(covlen)
         #Covrate = (np.sum(covlen) + int(newScore <= 0))/(t - len(trainPoints))
     
-    func_est_final = np.hstack((lower, higher)).T
-    coverage = 1 - coverage 
+    low = QR.predict(input_test=input, num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[0]
+    high = QR.predict(input_test=input, num_split=config.num_split, num_estimator=config.num_estimator, max_depth=config.max_depth)[1]
+    X = np.full([len(input), 1], confQuantAdapt)
+    lower_n = low.reshape(-1, 1) - X
+    higher_n = high.reshape(-1, 1) + X
+    func_est_final = np.hstack((lower_n, higher_n)).T
+    coverage = 1 - coverage
 
-    return coverage, func_est_final
+    return coverage, input, func_est_final

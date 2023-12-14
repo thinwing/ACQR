@@ -74,9 +74,10 @@ regular_pdm = np.array([0.0])
 ## Pinball Loss : Moreau Envelope
 # gamma = 0.0001
 # gamma = 100.0
-gamma = 10.0 ** (np.arange(4) - 1)
+gamma = 10.0 ** (np.arange(5) - 1)
+#gamma = np.array([1000.0])
 # gamma_conditional = 0.1
-gamma_default = 100.0
+gamma_default = 10.0
 #gamma_default = 0.5
 
 dict_band_single = np.array([0.1])
@@ -95,7 +96,7 @@ alpha_range = 0.95
 # 'NN', 'QRF', 'single_kernel', 'single_rff', 'multi_kernel', 'multi_rff'
 method_all = ('NN', 'QRF', 'KQR', 'single_kernel', 'single_rff', 'multi_kernel', 'multi_rff',)
 method = 'single_kernel'
-methods = ('single_kernel', )
+methods = ('single_kernel', 'multi_kernel')
 
 # Loss function
 loss_all = ('pinball', 'pinball_moreau', 'pinball_smooth_relax', 'pinball_huberized', 'pmc_online', 'pmc_batch')

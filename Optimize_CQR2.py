@@ -127,12 +127,10 @@ class online_learning(base_learning):
             self.func_est = gd.learning(step_size=config.step_size)[0]
             self.kernel_weight = gd.learning(step_size=config.step_size)[1]
             self.Iter = gd.Iter
-            print('self.Iter')
-            print(self.Iter)
+            #print('self.Iter')
+            #print(self.Iter)
             #キャリブレーションセットでカーネル計算
-            ol_c = eval(self.method['method'])(input=self.input_ca, dict_band=self.method['dict_band'])        
-            ol_c.dict_define(self.method['variable'])
-            self.calib_vector = ol_c.kernel_vector(self.input_ca)
+            self.calib_vector = ol_tr.kernel_vector(self.input_ca)
             #キャリブレーションセットで区間構築
             self.func_calib = np.zeros([len(self.alpha), 1, len(self.output_ca)])
             for a in range(len(self.alpha)):
@@ -144,14 +142,10 @@ class online_learning(base_learning):
             self.func_high_c = self.func_calib[1].T
             self.scores_c = np.maximum(self.output_ca - self.func_high_c.reshape(-1, 1), self.func_low_c.reshape(-1, 1) - self.output_ca)
             self.confQuantAdapt_c = np.percentile(self.scores_c, config.alpha_range * 100)
-            print('Asura')
-            print(self.confQuantAdapt_c)
             self.X_c = np.full([len(self.scores_c), 1], self.confQuantAdapt_c)
             #テストセットでカーネル計算
-            ol_t = eval(self.method['method'])(input=self.input_te, dict_band=self.method['dict_band'])        
-            ol_t.dict_define(self.method['variable'])
-            self.test_vector = ol_t.kernel_vector(self.input_te)
-            #キャリブレーションセットで区間構築
+            self.test_vector = ol_tr.kernel_vector(self.input_te)
+            #testセットで区間構築
             self.func_test = np.zeros([len(self.alpha), 1, len(self.output_te)])
             for a in range(len(self.alpha)):
                 self.func_test[a,:,:] = np.dot(self.kernel_weight[a].T, self.test_vector)
@@ -165,8 +159,8 @@ class online_learning(base_learning):
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
     def save(self):
-        data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR2' 
-        mkdir(data_path, exist_ok=True) 
+        data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR' 
+        mkdir(data_path, exist_ok=True)
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)

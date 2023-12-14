@@ -113,10 +113,10 @@ elif config.optimize_flag == 'custom':
                                 learn.save()
                                 
                             elif eval('address.' + str(method))['processing'] == 'online':
-                                learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
-                                grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
-                                #learn = Optimize_CQR2.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
-                                #grd_truth = Optimize_CQR2.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                #learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                #grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                learn = Optimize_CQR2.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                grd_truth = Optimize_CQR2.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 learn.pre_learning()
                                 for loss_temp in config.losses:
                                     if str(loss_temp) == 'pinball':
@@ -157,7 +157,7 @@ elif config.optimize_flag == 'custom':
                                     integrate(data_path=learn.data_path_temp, method=str(method), loss=loss_temp, gamma=0, trial=config.trial)
                                 else:
                                     for gamma in config.gamma:
-                                        integrate_CQR(data_path=learn.data_path_temp, method=str(method), loss=loss_temp, gamma=gamma, trial=config.trial)   
+                                        integrate_CQR(data_path=learn.data_path_temp, method=str(method), loss=loss_temp, gamma=gamma, trial=config.trial)
 
                     #CQR追加パッチ
                     #ここ怪しい，config.Iterではないと思う

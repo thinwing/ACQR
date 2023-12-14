@@ -60,6 +60,7 @@ def dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_
     #np.savez_compressed(data_path + '/outlier_c', output_train=output_train_c, output_test=output_test_c, output_train_noise=output_train_noise_c, output_test_noise=output_test_noise_c, outlier_type=outlier_type)
     
 if __name__ == '__main__':
-    for i in range(config.trial):
+    #for i in range(11, config.trial):
+        i = 10
         data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1)
         dt(data_path=data_path)

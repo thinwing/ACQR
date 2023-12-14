@@ -3,6 +3,7 @@ import configuration.config as config
 import configuration.address as address 
 from algorithms import *
 from os import makedirs as mkdir
+from range_get import range_get
 
 def gt(data_path, observation, noise, data, alpha):
     sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)    
@@ -105,8 +106,6 @@ class online_learning(base_learning):
 
         else:
             #トレーニングセット，キャリブレーションセット，テストセットに分割
-            print('Iter')
-            print(self.Iter)
             self.input_a, self.input_b, self.input_te = np.array_split(self.input_test, 3, 0)
             self.input_c = np.vstack((self.input_a, self.input_b))
             self.output_a, self.output_b, self.output_te = np.array_split(self.output_test, 3, 0)
@@ -118,6 +117,7 @@ class online_learning(base_learning):
             self.input_ca = self.input_c[calpoints, :]
             self.output_ca = self.output_c[calpoints]
             self.Iter_tr = int(len(self.input_tr))
+            data_path = data_path_temp + '/exp_data.npz'
             #トレーニングセットでカーネル計算
             ol_tr = eval(self.method['method'])(input=self.input_tr, dict_band=self.method['dict_band'])        
             ol_tr.dict_define(self.method['variable'])
@@ -125,18 +125,32 @@ class online_learning(base_learning):
             #トレーニングセットで重み計算
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.func_est = gd.learning(step_size=config.step_size)[0]
+            self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = gd.learning(step_size=config.step_size)[1]
             self.Iter = gd.Iter
-            print('self.Iter')
-            print(self.Iter)
+
+            #おまけ
+            savepath = 'alpha'
+            self.func_est_fin[0] = self.func_est_fin[0].reshape(-1)
+            self.func_est_fin[1] = self.func_est_fin[1].reshape(-1)
+            range_get(input_test=self.input_tr, func_est=self.func_est_fin, savepath=savepath)
+
             #キャリブレーションセットでカーネル計算
-            ol_c = eval(self.method['method'])(input=self.input_ca, dict_band=self.method['dict_band'])        
-            ol_c.dict_define(self.method['variable'])
-            self.calib_vector = ol_c.kernel_vector(self.input_ca)
+            ol_c = eval(self.method['method'])(input=self.input_ca, dict_band=self.method['dict_band'])
+            self.calib_vector = ol_tr.kernel_vector(self.input_ca)
             #キャリブレーションセットで区間構築
             self.func_calib = np.zeros([len(self.alpha), 1, len(self.output_ca)])
+                        
             for a in range(len(self.alpha)):
                 self.func_calib[a,:,:] = np.dot(self.kernel_weight[a].T, self.calib_vector)
+            
+            #おまけ
+            self.input_ca = self.input_ca.reshape(-1)
+            self.func_calib[0] = self.func_calib[0].reshape(-1)
+            self.func_calib[1] = self.func_calib[1].reshape(-1)
+            savepath = 'beta'
+            range_get(input_test=self.input_ca, func_est=self.func_calib, savepath=savepath)
+
             #for i in range(self.Iter):        
                 # Pinball Moreau
             #キャリブレーションセットで適合性スコア計算
@@ -144,13 +158,10 @@ class online_learning(base_learning):
             self.func_high_c = self.func_calib[1].T
             self.scores_c = np.maximum(self.output_ca - self.func_high_c.reshape(-1, 1), self.func_low_c.reshape(-1, 1) - self.output_ca)
             self.confQuantAdapt_c = np.percentile(self.scores_c, config.alpha_range * 100)
-            print('Asura')
-            print(self.confQuantAdapt_c)
             self.X_c = np.full([len(self.scores_c), 1], self.confQuantAdapt_c)
+
             #テストセットでカーネル計算
-            ol_t = eval(self.method['method'])(input=self.input_te, dict_band=self.method['dict_band'])        
-            ol_t.dict_define(self.method['variable'])
-            self.test_vector = ol_t.kernel_vector(self.input_te)
+            self.test_vector = ol_tr.kernel_vector(self.input_te)
             #キャリブレーションセットで区間構築
             self.func_test = np.zeros([len(self.alpha), 1, len(self.output_te)])
             for a in range(len(self.alpha)):
@@ -163,6 +174,13 @@ class online_learning(base_learning):
             #self.coverage_ht = np.where((self.higher_t - self.output_te > 0), 1, 0)
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
+
+            #おまけ
+            self.input_te = self.input_te.reshape(-1)
+            self.func_est_final[0] = self.func_est_final[0].reshape(-1)
+            self.func_est_final[1] = self.func_est_final[1].reshape(-1)
+            savepath = 'gamma'
+            range_get(input_test=self.input_te, func_est=self.func_est_final, savepath=savepath)
 
     def save(self):
         data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR' 

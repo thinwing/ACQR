@@ -19,11 +19,12 @@ class ACIlearning():
         self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
-    def eval_ACI(self, ground_truth, coverage, func_est_final):
+    def eval_ACI(self, ground_truth, coverage, func_est_final, input):
         self.coverage = coverage
         self.coverage_all = coverage
         self.grd_truth = ground_truth
         self.func_est_final = func_est_final
+        self.input = input
 
         print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         print("coverage")
@@ -42,7 +43,7 @@ class ACIlearning():
         data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) 
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/ACI.npz'
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, input=self.input)
 
     #def CQR(self, data_c, observation_c):
         #self.output_c = observation_c['output_test']

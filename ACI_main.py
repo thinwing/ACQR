@@ -50,7 +50,8 @@ for noise_type in config.noise_types:
                 data = np.load(data_path + 'data.npz')
                 ACI_data = runACI(output=observation['output_test'], input=data['input_test'], alpha=alpha_all, alpha_range=alpha_range, step=0.005, tinit=1000, splitSize=0.5)
                 coverage = ACI_data[0]
-                func_est_final = ACI_data[1]
+                input_ACI = ACI_data[1]
+                func_est_final = ACI_data[2]
                 now = datetime.datetime.now()
                 data_path_temp = data_path
                 data_path = 'truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
@@ -58,7 +59,7 @@ for noise_type in config.noise_types:
                 grd_truth = true['arr_0']
                 data_path = data_path_temp
                 learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
-                learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final)
+                learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()
                 with open('log2.txt', 'a') as f:
                     f.write('\n' + '\t' + str(i + 1) + ' / ' + str(config.trial) + ' : ' + str(now))
