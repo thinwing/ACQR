@@ -16,15 +16,15 @@ class _graph():
         # batch and online
         for trial_temp in range(trial):
             data_path = self.data_path + '/alpha=' + str(alpha) + '/trial=' + str(trial_temp + 1)
-            fig(data_path=data_path, list=list)
+            #fig(data_path=data_path, list=list)
 
-            fig_range(data_path=data_path, list=list)
+            #fig_range(data_path=data_path, list=list)
 
-            #figACI(data_path=data_path, trial = trial_temp, list=list)
-            #fig_rangeACI(data_path=data_path, trial = trial_temp, list=list)
+            figACI(data_path=data_path, trial = trial_temp, list=list)
+            fig_rangeACI(data_path=data_path, trial = trial_temp, list=list)
 
-            figCQR(data_path=data_path, trial = trial_temp, list=list)
-            fig_rangeCQR(data_path=data_path, trial = trial_temp, list=list)    
+            #figCQR(data_path=data_path, trial = trial_temp, list=list)
+            #fig_rangeCQR(data_path=data_path, trial = trial_temp, list=list)    
         
     def bo_coverage(self, list):
         alpha_coverage(data_path=self.data_path, list=list)

@@ -130,8 +130,6 @@ def fig_range(data_path, list=np.array([['same_range'],['ground_truth']]), loss=
         # load the data
         method = np.load(data_path_detail)
         method_func = (method['func_est'])[:, input_test_ord]
-        print('rinchan')
-        print(method_func[1])
         
         range_est = method_func[1] - method_func[0]
         

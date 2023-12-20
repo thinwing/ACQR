@@ -2,7 +2,6 @@ import numpy as np
 
 def range_error(func_est, gt, Iter, method):
     range_func_est = func_est[1] - func_est[0]
-    print(range_func_est)
 
     range_gt = gt[1] - gt[0]
     
@@ -30,6 +29,7 @@ def range_error(func_est, gt, Iter, method):
     
     else:
         if method['processing'] == 'online':
+
             range_func_est_ave = np.sum(range_func_est, axis=1) / len(range_func_est[0])
 
             coverage_db_temp = np.sum((range_func_est - range_gt.T) ** 2, axis=1) / np.sum(range_gt ** 2, axis=0)  

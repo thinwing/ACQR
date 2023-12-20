@@ -90,7 +90,7 @@ def fig_rangeACI(data_path, trial , list=np.array([['same_range'],['ground_truth
     data = np.load(data_path_temp)
     
     # output_test_true = data['output_true_test']
-    observation_test = data['observation_test']
+    # observation_test = data['observation_test']
     input_test = data['input_test'].reshape(-1)
     
     inputa,inputb,input_test = np.split(input_test,3)
@@ -98,7 +98,7 @@ def fig_rangeACI(data_path, trial , list=np.array([['same_range'],['ground_truth
     
     input_test = np.sort(input_test).reshape(-1)
     # output_test_true = output_test_true[input_test_ord].reshape(-1)
-    observation_test = observation_test[input_test_ord].reshape(-1)
+    #observation_test = observation_test[input_test_ord].reshape(-1)
         
     fig_size = np.array([12, 8])
     fig = plt.figure(figsize=fig_size)
@@ -125,8 +125,12 @@ def fig_rangeACI(data_path, trial , list=np.array([['same_range'],['ground_truth
         # load the data
         method = np.load(data_path_detail)
         method_func = (method['func_est'])[:, input_test_ord]
+        print('rinchan')
+        print(method_func[1])
+        print(method_func[0])
         
         range_est = method_func[1] - method_func[0]
+        print(range_est)
         
         # ax[index].scatter(input_test, observation_test, s=grp.dot_size, label='Observation', color='green')
         # ax[index].plot(input_test, output_test_true, label=r'True Function $\phi$', color='black', linewidth=grp.linewidth, linestyle='dashed')

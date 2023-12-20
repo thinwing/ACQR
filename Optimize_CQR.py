@@ -16,7 +16,8 @@ def gt(data_path, observation, noise, data, alpha):
     data_path = data_path_temp + '/exp_data.npz'
     np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
    
-    return grd_truth
+    return sr
+    #return grd_truth
 
 def gtCQR(data_path, observation, noise, data, alpha):
     true_a, true_b, true_c = np.array_split(data['output_true_test'], 3, 0)

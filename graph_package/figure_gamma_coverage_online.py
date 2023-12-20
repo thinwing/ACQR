@@ -102,9 +102,7 @@ def comp_proposed_coverage_db(data_path, loss_list, method_list):
         ax.legend(fontsize=36)
         # ax.set_ylim(0, 1)
         plt.tick_params(labelsize=grp.ticks)
-
         
-
         save_path_alpha = data_path_alpha.replace('text','graph')
         mkdir(save_path_alpha, exist_ok=True)
         save_name = save_path_alpha + '/coverage_gamma_db.pdf'
