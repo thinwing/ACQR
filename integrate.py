@@ -8,7 +8,6 @@ import scipy as sp
 import scipy.stats as st
 
 def get_path(data_path, method, loss=False, gamma=False):
-    print(eval('grp.' + str(method))['loss'])
     if eval('grp.' + str(method))['loss'] == 'None':
         data_path_add = '/' + str(eval('grp.' + str(method))['address']) 
         data_path_detail = data_path + data_path_add + '/' + str(eval('grp.' + str(method))['save_name']) + '.npz'
@@ -96,7 +95,7 @@ def data_integrate_CQR(data_path, method, loss, gamma, trial=config.trial):
         # get path
         data_path_temp = data_path + '/' + 'trial=' + str(i + 1)
         data_path_detail, _ = get_path_CQR(data_path=data_path_temp, method=method, loss=loss, gamma=gamma)
-        
+
         result = np.load(data_path_detail)
         
         if i == 0:
@@ -128,6 +127,106 @@ def data_integrate_CQR(data_path, method, loss, gamma, trial=config.trial):
     # save
     save_path, save_path_add = get_path_CQR(data_path=data_path, method=method, loss=loss, gamma=gamma)
     print(save_path)
+    mkdir(data_path+save_path_add, exist_ok=True)
+    np.savez_compressed(save_path, coverage=coverage, coverage_all=coverage_all, coverage_interval=cov_interval, coverage_db=10 * np.log10(coverage_db), coverage_db_interval=(10 * np.log10(cov_db_interval)), range_ave=range_ave, input_te=input_neo)
+
+def data_integrate_CQR100(data_path, method, loss, gamma, trial=config.trial):
+    cov_temp = np.zeros(trial)
+    cov_db_temp = np.zeros([trial, 3])
+    cov_db_interval = np.zeros([3, 2])
+    input_neo = np.zeros([trial,config.Iter_CQR])
+
+    alpha_rel = 0.95
+    deg_free = trial - 1
+
+    for i in range(trial):
+        # get path
+        data_path_temp = data_path + '/' + 'trial=' + str(i + 1)
+        data_path_detail, _ = get_path_CQR(data_path=data_path_temp, method=method, loss=loss, gamma=gamma)
+        data_path_detail = data_path_detail.replace('CQR', 'CQR100')        
+        result = np.load(data_path_detail)
+        
+        if i == 0:
+            coverage = result['coverage'] / trial
+            coverage_all = result['coverage_all'] / trial
+            coverage_db = result['coverage_db'] / trial
+            range_ave = result['range_ave'] / trial
+            input_neo[0,:] = result['input_te'].reshape(-1)
+
+        else:
+            coverage += result['coverage'] / trial        
+            coverage_all += result['coverage_all'] / trial
+            coverage_db += result['coverage_db'] / trial
+            range_ave += result['range_ave'] / trial
+            input_neo[i,:] = result['input_te'].reshape(-1)
+        
+        cov_db_temp[i] = result['coverage_db'][:, -1].reshape(-1) 
+        cov_temp[i] = (((result['coverage'])[1] - (result['coverage'])[0]).reshape(-1))[-1]
+
+    cov_ave = st.tmean(cov_temp)
+    cov_scale = np.sqrt(st.tvar(cov_temp) / trial)
+
+    for j in range(3):
+        cov_ave_db = st.tmean(cov_db_temp[:, j])
+        cov_scale_db = np.sqrt(st.tvar(cov_db_temp[:, j]) / trial)
+        cov_db_interval[j] = st.t.interval(alpha_rel, deg_free, loc=cov_ave_db, scale=cov_scale_db)
+    
+    cov_interval = st.t.interval(alpha_rel, deg_free, loc=cov_ave, scale=cov_scale)
+    # save
+    save_path, save_path_add = get_path_CQR(data_path=data_path, method=method, loss=loss, gamma=gamma)
+    print(save_path)
+    save_path = save_path.replace('CQR', 'CQR100')
+    save_path_add = save_path_add.replace('CQR', 'CQR100')
+    mkdir(data_path+save_path_add, exist_ok=True)
+    np.savez_compressed(save_path, coverage=coverage, coverage_all=coverage_all, coverage_interval=cov_interval, coverage_db=10 * np.log10(coverage_db), coverage_db_interval=(10 * np.log10(cov_db_interval)), range_ave=range_ave, input_te=input_neo)
+
+def data_integrate_CQR0(data_path, method, loss, gamma, trial=config.trial):
+    cov_temp = np.zeros(trial)
+    cov_db_temp = np.zeros([trial, 3])
+    cov_db_interval = np.zeros([3, 2])
+    input_neo = np.zeros([trial,config.Iter_CQR])
+
+    alpha_rel = 0.95
+    deg_free = trial - 1
+
+    for i in range(trial):
+        # get path
+        data_path_temp = data_path + '/' + 'trial=' + str(i + 1)
+        data_path_detail, _ = get_path_CQR(data_path=data_path_temp, method=method, loss=loss, gamma=gamma)
+        data_path_detail = data_path_detail.replace('CQR', 'CQR0')        
+        result = np.load(data_path_detail)
+        
+        if i == 0:
+            coverage = result['coverage'] / trial
+            coverage_all = result['coverage_all'] / trial
+            coverage_db = result['coverage_db'] / trial
+            range_ave = result['range_ave'] / trial
+            input_neo[0,:] = result['input_te'].reshape(-1)
+
+        else:
+            coverage += result['coverage'] / trial        
+            coverage_all += result['coverage_all'] / trial
+            coverage_db += result['coverage_db'] / trial
+            range_ave += result['range_ave'] / trial
+            input_neo[i,:] = result['input_te'].reshape(-1)
+        
+        cov_db_temp[i] = result['coverage_db'][:, -1].reshape(-1) 
+        cov_temp[i] = (((result['coverage'])[1] - (result['coverage'])[0]).reshape(-1))[-1]
+
+    cov_ave = st.tmean(cov_temp)
+    cov_scale = np.sqrt(st.tvar(cov_temp) / trial)
+
+    for j in range(3):
+        cov_ave_db = st.tmean(cov_db_temp[:, j])
+        cov_scale_db = np.sqrt(st.tvar(cov_db_temp[:, j]) / trial)
+        cov_db_interval[j] = st.t.interval(alpha_rel, deg_free, loc=cov_ave_db, scale=cov_scale_db)
+    
+    cov_interval = st.t.interval(alpha_rel, deg_free, loc=cov_ave, scale=cov_scale)
+    # save
+    save_path, save_path_add = get_path_CQR(data_path=data_path, method=method, loss=loss, gamma=gamma)
+    print(save_path)
+    save_path = save_path.replace('CQR', 'CQR0')
+    save_path_add = save_path_add.replace('CQR', 'CQR0')
     mkdir(data_path+save_path_add, exist_ok=True)
     np.savez_compressed(save_path, coverage=coverage, coverage_all=coverage_all, coverage_interval=cov_interval, coverage_db=10 * np.log10(coverage_db), coverage_db_interval=(10 * np.log10(cov_db_interval)), range_ave=range_ave, input_te=input_neo)
 

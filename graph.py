@@ -41,6 +41,9 @@ class _graph():
         gamma_coverage(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         gamma_error(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         
+        #gamma_coverage3(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_error3(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        
         # comp_proposed_coverage_gamma(data_path=self.data_path, loss_list=loss_list, method_list=method)
         # comp_proposed_coverage_gamma_db(data_path=self.data_path, loss_list=loss_list, method_list=method)
         # comp_proposed_coverage_db_gamma(data_path=self.data_path, loss_list=loss_list, method_list=method)
@@ -58,9 +61,9 @@ if __name__ == '__main__':
     #gr.bo_coverage(list=grp.list_graph_coverage)    
     #for index, item in enumerate(grp.loss_list):
         #gr.o_coverage(list=grp.list_graph_online, loss=item, gamma=eval('grp.' + str(item))['gamma'])
-    #     # print(index + 1)
+        #print(index + 1)
 
     #ここフォントの問題あり    
-    #gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
+    gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
     
     #gr.outlier_coverage(list=grp.list_graph_coverage)

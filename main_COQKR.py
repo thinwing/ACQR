@@ -28,7 +28,7 @@ alpha_all = config.alpha_all[config.start:config.limit]
 #         alpha_all = alpha_all_temp[(num - 1) * num_len :]
 # else:
 #     alpha_all = alpha_all_temp
-with open('log3.txt', 'w') as f:
+with open('log3.txt', 'a') as f:
     f.write('start')
     f.write('\n---------------------------------------------')
 
@@ -38,7 +38,7 @@ if config.onlyCOQKRflag == 'on':
         for outlier_type in config.outlier_type_all:
         #for outlier_type in config.outlier_types:
             for outlier_rate in config.outlier_rate:
-                for i in range(config.trial):
+                for i in range(1, config.trial):
                     data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i + 1)
                     dt.dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_type=noise_type, outlier_type=outlier_type, outlier_rate=outlier_rate)\
 
@@ -48,7 +48,7 @@ if config.optimize_flag == 'all':
             for outlier_rate in config.outlier_rate:
                 for method in config.method_all:
                     for alpha in config.alpha_all:
-                        for i in range(config.trial):
+                        for i in range(1, config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')
@@ -94,7 +94,7 @@ elif config.optimize_flag == 'custom':
                             f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                             f.write('\n---------------------------------------------')
                             
-                        for i in range(10, config.trial):
+                        for i in range(1, config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')

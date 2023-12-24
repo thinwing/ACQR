@@ -20,17 +20,17 @@ for i in range(config.trial):
     ACI = {'method':'Kernel', 'variable':config.coherence, 'dict_band':config.dict_band_multi, 'save_name':'multi_kernel', 'processing':'online'}
     
     #ACI
-    data_path = 'result/text/dim=1/linear_expansion/sparse/=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1)
-    func_path = data_path + '/online/pinball_moreau/\u03b3=0.5/ACI.npz'
-    func_result = np.load(func_path)
-    func_est = func_result['func_est']
+    #data_path = 'result/text/dim=1/linear_expansion/sparse/=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1)
+    #func_path = data_path + '/online/pinball_moreau/\u03b3=0.5/ACI.npz'
+    #func_result = np.load(func_path)
+    #func_est = func_result['func_est']
 
-    range_func_est_ave, coverage_db = error(func_est=func_est, gt=grd_truth, Iter=config.Iter, method = ACI)
-    print(np.size(func_est))
-    save_path = 'truth/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1) + '/online/pinball_moreau/\u03b3=0.5'
-    mkdir(save_path, exist_ok=True)
-    save_path += '/'
-    np.savez_compressed(save_path + 'ACI.npz', range_ave=range_func_est_ave, coverage_db=coverage_db, func_est=func_est)
+    #range_func_est_ave, coverage_db = error(func_est=func_est, gt=grd_truth, Iter=config.Iter, method = ACI)
+    #print(np.size(func_est))
+    #save_path = 'truth/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1) + '/online/pinball_moreau/\u03b3=0.5'
+    #mkdir(save_path, exist_ok=True)
+    #save_path += '/'
+    #np.savez_compressed(save_path + 'ACI.npz', range_ave=range_func_est_ave, coverage_db=coverage_db, func_est=func_est)
     
     for gamma in config.gamma:
         for method in config.methods:

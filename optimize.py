@@ -109,8 +109,9 @@ class online_learning(base_learning):
 
         else:
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter, kernel_vector=self.kernel_vector, kernel_vector_eval=self.kernel_vector_eval, output_train=self.output_train)
-            self.func_est = gd.learning(step_size=config.step_size)[0]
-            self.kernel_weight = gd.learning(step_size=config.step_size)[1]
+            self.learned = gd.learning(step_size=config.step_size)
+            self.func_est = self.learned[0]
+            self.kernel_weight = self.learned[1]
             self.func_est_final = self.func_est[:, - 1, :]
             self.Iter = gd.Iter
 

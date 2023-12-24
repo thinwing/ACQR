@@ -28,8 +28,8 @@ for noise_type in config.noise_types:
             for index_gamma, gamma_temp in enumerate(gamma):
                 for i in range(config.trial):
                     # data load
-                    data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(i+1) + '/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/' + method + '.npz'
-                    #'data_path_detail, _ = get_path_CQR(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
+                    data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(i+1) + '/online/pinball_moreau' + '/\u03b3=' + str(gamma_temp) + '/CQR100/' + method + '.npz'
+                    #'data_path_detail, _ = get_path_CQR10(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
                     method_result = np.load(data_path_detail)
                     coverage = (method_result['coverage'][1] - method_result['coverage'][0]).reshape(-1)
                     if method == 'single_kernel':
@@ -42,7 +42,7 @@ for noise_type in config.noise_types:
         outlier_rate = 0.04
         for method in config.methods:
             for index_gamma, gamma_temp in enumerate(gamma):
-                data_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR'
+                data_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(gamma_temp) + '/CQR100'
                 x = result_coverage[index_gamma, :]
                 
                 plt.hist(x)
@@ -51,20 +51,20 @@ for noise_type in config.noise_types:
                 plt.ylabel('Frequency', fontsize=20)
                 
                 save_path = data_path.replace('text', 'graph')
-                #mkdir(save_path, exist_ok=True)
+                mkdir(save_path, exist_ok=True)
                 save_name = save_path + '/hist.pdf'
                 plt.savefig(save_name, bbox_inches='tight')
                 plt.clf()
                 plt.close()
                 image_name = save_name.replace('pdf', 'png')
-                np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, input=self.input)
+                #np.savez_compressed(data_path, coverage=coverage, coverage_all=coverage_all, range_ave=range_func_est_ave, coverage_db=coverage_db, func_est=func_est_final, input=input)
                 cv(save_name, image_name)
 
 for noise_type in config.noise_types:
     for outlier_type in config.outlier_types:
         outlier_rate = 0.04
         for index_gamma, gamma_temp in enumerate(gamma):
-            data_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(gamma_temp) + '/CQR'
+            data_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(gamma_temp) + '/CQR100'
             x = result_coverage_m[index_gamma, :]
             
             plt.hist(x)
@@ -73,7 +73,7 @@ for noise_type in config.noise_types:
             plt.ylabel('Frequency', fontsize=20)
 
             save_path = data_path.replace('text', 'graph')
-            #mkdir(save_path, exist_ok=True)
+            mkdir(save_path, exist_ok=True)
             save_name = save_path + '/hist_m.pdf'
             plt.savefig(save_name, bbox_inches='tight')
             plt.clf()

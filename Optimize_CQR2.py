@@ -124,8 +124,9 @@ class online_learning(base_learning):
             self.train_vector = ol_tr.kernel_vector(self.input_tr)
             #トレーニングセットで重み計算
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
-            self.func_est = gd.learning(step_size=config.step_size)[0]
-            self.kernel_weight = gd.learning(step_size=config.step_size)[1]
+            self.learned = gd.learning(step_size=config.step_size)
+            self.func_est = self.learned[0]
+            self.kernel_weight = self.learned[1]
             self.Iter = gd.Iter
             #print('self.Iter')
             #print(self.Iter)

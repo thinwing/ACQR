@@ -15,6 +15,9 @@ from .figure_observation2 import fig_rangeCQR
 from .figure_range_error_online import comp_proposed_coverage_db
 from .figure_range_error_online import comp_proposed_range_ave
 
+from .figure_gamma_3 import gamma_coverage3
+from .figure_gamma_3 import gamma_error3
+
 from .figure_gamma_coverage import gamma_coverage
 from .figure_gamma_coverage import gamma_error
 

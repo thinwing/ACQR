@@ -6,7 +6,7 @@ from os import makedirs as mkdir
 from range_get import range_get
 
 def gt(data_path, observation, noise, data, alpha):
-    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)    
+    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
     data_path_temp = data_path + '/base'
     mkdir(data_path_temp, exist_ok=True)
     data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
@@ -125,9 +125,10 @@ class online_learning(base_learning):
             self.train_vector = ol_tr.kernel_vector(self.input_tr)
             #トレーニングセットで重み計算
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
-            self.func_est = gd.learning(step_size=config.step_size)[0]
+            self.learned = gd.learning(step_size=config.step_size)
+            self.func_est = self.learned[0]
             self.func_est_fin = self.func_est[:, - 1, :]
-            self.kernel_weight = gd.learning(step_size=config.step_size)[1]
+            self.kernel_weight = self.learned[1]
             self.Iter = gd.Iter
 
             #おまけ

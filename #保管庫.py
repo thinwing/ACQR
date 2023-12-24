@@ -1,5 +1,10 @@
 #保管庫
-
+data_path_temp = data_path
+    data_path ='truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1)  
+    mkdir(data_path, exist_ok=True)
+    data_path = data_path + '/grd_truth.npz'
+    np.savez_compressed(data_path, grd_truth)
+    data_path = data_path_temp
 
 
 import graph
