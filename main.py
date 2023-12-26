@@ -43,7 +43,7 @@ if config.optimize_flag == 'all':
             for outlier_rate in config.outlier_rate:
                 for method in config.method_all:
                     for alpha in config.alpha_all:
-                        for i in range(1, config.trial):
+                        for i in range(config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')
@@ -91,7 +91,7 @@ elif config.optimize_flag == 'custom':
 
                             
                         #ここ変えました
-                        for i in range(1, config.trial):
+                        for i in range(config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')

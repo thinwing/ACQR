@@ -19,7 +19,7 @@ Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
 Iter_batch = 500
-trial = 10
+trial = 1
 outlier_rate_temp = np.arange(6) * 0.02
 outlier_rate = outlier_rate_temp[:]
 # outlier_rate = np.array([0.0])
@@ -58,9 +58,17 @@ sigma_rbf = 0.1
 
 ## Gradient methods
 
-step_size = 0.005
+#step_size = 0.005
+
+#↓これ良さげ
+#step_size = 0.05
+
 #step_size = 0.1
-# step_size = 0.01
+
+#↓これ一番いい
+#step_size = 0.025
+#↓これもいい？
+step_size = 0.0075
 coherence = 10.0
 num_rff = 50 # no meaning
 
