@@ -8,6 +8,8 @@ def outlier_create2(input, output_true, noise_real, outlier_type):
     if outlier_type == 'sparse':
         arr1 = np.arange(19, 2980, 40)
         arr2 = np.arange(39, 3000, 40)
+        #arr1 = np.arange(24, 2975, 50)
+        #arr2 = np.arange(49, 3000, 50)
         #out = np.hstack((arr1, arr2))
         zero = np.zeros((3000, 1))
         for s in arr1:

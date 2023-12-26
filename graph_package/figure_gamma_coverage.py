@@ -90,7 +90,7 @@ def gamma_coverage(data_path, loss_list, method='single_kernel', alpha=config.al
     # proposed OCQKR               
         for index_gamma, gamma_temp in enumerate(gamma):
             # data load
-            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
+            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
             #'data_path_detail, _ = get_path_CQR(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
             
             print(data_path_detail)
@@ -103,7 +103,7 @@ def gamma_coverage(data_path, loss_list, method='single_kernel', alpha=config.al
     # proposed OCQMKR               
         for index_gamma, gamma_temp in enumerate(gamma):
             # data load
-            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
+            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
             #'data_path_detail, _ = get_path_CQR(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
             
             print(data_path_detail)
@@ -207,7 +207,7 @@ def gamma_error(data_path, loss_list, method='single_kernel', alpha=config.alpha
 # proposed OCQKR
             for index_gamma, gamma_temp in enumerate(gamma):
                 # data load
-                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
+                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
                 
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 
@@ -217,7 +217,7 @@ def gamma_error(data_path, loss_list, method='single_kernel', alpha=config.alpha
 # proposed OCQKR
             for index_gamma, gamma_temp in enumerate(gamma):
                 # data load
-                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
+                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
                 
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 

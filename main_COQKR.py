@@ -38,7 +38,7 @@ if config.optimize_flag == 'all':
             for outlier_rate in config.outlier_rate:
                 for method in config.method_all:
                     for alpha in config.alpha_all:
-                        for i in range(1, config.trial):
+                        for i in range(config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')
@@ -67,7 +67,7 @@ elif config.optimize_flag == 'custom':
     for noise_type in config.noise_types:
         for outlier_type in config.outlier_types:
             #for outlier_rate in config.outlier_rate:
-                outlier_rate = 0.05
+                outlier_rate = 0.04
                 with open('log3.txt', 'a') as f:
                     f.write('\nnoise_type : ' + str(noise_type))
                     f.write('\noutlier_type : ' + str(outlier_type))
@@ -84,7 +84,7 @@ elif config.optimize_flag == 'custom':
                             f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                             f.write('\n---------------------------------------------')
                             
-                        for i in range(1, config.trial):
+                        for i in range(config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')

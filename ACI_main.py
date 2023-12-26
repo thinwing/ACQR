@@ -30,7 +30,7 @@ with open('log2.txt', 'a') as f:
 for noise_type in config.noise_types:
     for outlier_type in config.outlier_types:
         #for outlier_rate in config.outlier_rate:
-        outlier_rate = 0.05
+        outlier_rate = 0.04
         with open('log2.txt', 'a') as f:
             f.write('\nnoise_type : ' + str(noise_type))
             f.write('\noutlier_type : ' + str(outlier_type))

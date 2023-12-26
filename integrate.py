@@ -86,7 +86,8 @@ def data_integrate_CQR(data_path, method, loss, gamma, trial=config.trial):
     cov_temp = np.zeros(trial)
     cov_db_temp = np.zeros([trial, 3])
     cov_db_interval = np.zeros([3, 2])
-    input_neo = np.zeros([trial,config.Iter_CQR])
+    #input_neo = np.zeros([trial,config.Iter_CQR])
+    input_neo = np.zeros([trial,500])
 
     alpha_rel = 0.95
     deg_free = trial - 1

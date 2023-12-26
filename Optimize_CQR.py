@@ -9,7 +9,11 @@ def gtCQR(data_path, observation, noise, data, alpha):
     true_a, true_b, true_c = np.array_split(data['output_true_test'], 3, 0)
     obse_a, obse_b, obse_c = np.array_split(observation['output_test'], 3, 0)
     noise_a,noise_b,noise_c = np.array_split(noise['noise_test'], 3, 0)
-    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=true_c, output_test=obse_c, noise=noise_c, alpha=alpha)
+    #sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=true_c, output_test=obse_c, noise=noise_c, alpha=alpha)
+    true_x, true_d = np.array_split(true_c, 2, 0)
+    obse_x, obse_d = np.array_split(obse_c, 2, 0)
+    noise_x,noise_d = np.array_split(noise_c, 2, 0)
+    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=true_d, output_test=obse_d, noise=noise_d, alpha=alpha)
     data_path_temp = data_path + '/base/CQR'
     mkdir(data_path_temp, exist_ok=True)
     data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
@@ -39,6 +43,8 @@ class base_learning():
         
         self.alpha = alpha
         self.Iter = int(len(self.output_test)/3)
+        print('do')
+        print(self.Iter)
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
@@ -92,17 +98,35 @@ class online_learning(base_learning):
             self.Iter = prim.Iter
 
         else:
+            print('mise')
+            print(self.Iter)
             #トレーニングセット，キャリブレーションセット，テストセットに分割
-            self.input_a, self.input_b, self.input_te = np.array_split(self.input_test, 3, 0)
-            self.input_c = np.vstack((self.input_a, self.input_b))
-            self.output_a, self.output_b, self.output_te = np.array_split(self.output_test, 3, 0)
-            self.output_c = np.vstack((self.output_a, self.output_b))
-            trainPoints = np.random.choice(np.arange(self.Iter*2), size=int(self.Iter), replace=False)
-            calpoints = np.delete(np.arange(self.Iter*2), trainPoints)
-            self.input_tr = self.input_c[trainPoints, :]
-            self.output_tr = self.output_c[trainPoints]
-            self.input_ca = self.input_c[calpoints, :]
-            self.output_ca = self.output_c[calpoints]
+            #self.input_a, self.input_b, self.input_te = np.array_split(self.input_test, 3, 0)
+            #self.input_c = np.vstack((self.input_a, self.input_b))
+            #self.output_a, self.output_b, self.output_te = np.array_split(self.output_test, 3, 0)
+            #self.output_c = np.vstack((self.output_a, self.output_b))
+            #trainPoints = np.random.choice(np.arange(self.Iter*2), size=int(self.Iter), replace=False)
+            #calpoints = np.delete(np.arange(self.Iter*2), trainPoints)
+            self.input_a, self.input_b, self.input_c = np.array_split(self.input_test, 3, 0)
+            self.input_d = np.vstack((self.input_a, self.input_b))
+            self.input_e, self.input_f = np.array_split(self.input_c, 2, 0)
+            self.input_g = np.vstack((self.input_d, self.input_e))
+            self.output_a, self.output_b, self.output_c = np.array_split(self.output_test, 3, 0)
+            self.output_d = np.vstack((self.output_a, self.output_b))
+            self.output_e, self.output_f = np.array_split(self.output_c, 2, 0)
+            #self.output_g = np.vstack((self.output_d, self.output_e))
+            #trainPoints = np.random.choice(np.arange(2500), size=2000, replace=False)
+            #calpoints = np.delete(np.arange(2500), trainPoints)
+            #self.input_tr = self.input_g[trainPoints, :]
+            #self.output_tr = self.output_g[trainPoints]
+            #self.input_ca = self.input_g[calpoints, :]
+            #self.output_ca = self.output_g[calpoints]
+            self.input_tr = self.input_d
+            self.output_tr = self.output_d
+            self.input_ca = self.input_e
+            self.output_ca = self.output_e
+            self.input_te = self.input_f
+            self.output_te = self.output_f
             self.Iter_tr = int(len(self.input_tr))
             #data_path = data_path_temp + '/exp_data.npz'
             #トレーニングセットでカーネル計算
@@ -115,7 +139,6 @@ class online_learning(base_learning):
             self.func_est = self.learned[0]
             #self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = self.learned[1]
-            self.Iter = gd.Iter
 
             #おまけ
             #savepath = 'alpha'
@@ -149,7 +172,7 @@ class online_learning(base_learning):
 
             #テストセットでカーネル計算
             self.test_vector = ol_tr.kernel_vector(self.input_te)
-            #キャリブレーションセットで区間構築
+            #テストセットで区間構築
             self.func_test = np.zeros([len(self.alpha), 1, len(self.output_te)])
             for a in range(len(self.alpha)):
                 self.func_test[a,:,:] = np.dot(self.kernel_weight[a].T, self.test_vector)
