@@ -21,4 +21,3 @@ def outlier_create(input, output_true, noise_real, outlier_type, outlier_rate):
         output = output + (np.sqrt(1000) * np.random.randn(len(input), 1) * sparse_vector)
         
     return output, output_noise
-        

@@ -9,7 +9,7 @@ import configuration.address as address
 from algorithms import *
 
 #for outlier_rate in config.outlier_rate:
-outlier_rate = 0.04
+outlier_rate = 0.05
 for i in range(config.trial):
     #truth
     data_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1)

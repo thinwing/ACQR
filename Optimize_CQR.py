@@ -5,20 +5,6 @@ from algorithms import *
 from os import makedirs as mkdir
 from range_get import range_get
 
-def gt(data_path, observation, noise, data, alpha):
-    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
-    data_path_temp = data_path + '/base'
-    mkdir(data_path_temp, exist_ok=True)
-    data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
-    np.savez_compressed(data_path, func_est=sr, range_ave=same_range)
-    data_path = data_path_temp + '/' + str(address.ground_truth['save_name']) + '.npz'
-    np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
-    data_path = data_path_temp + '/exp_data.npz'
-    np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
-   
-    return sr
-    #return grd_truth
-
 def gtCQR(data_path, observation, noise, data, alpha):
     true_a, true_b, true_c = np.array_split(data['output_true_test'], 3, 0)
     obse_a, obse_b, obse_c = np.array_split(observation['output_test'], 3, 0)
@@ -32,7 +18,7 @@ def gtCQR(data_path, observation, noise, data, alpha):
     np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
     data_path = data_path_temp + '/exp_data.npz'
     np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
-    return grd_truth
+    return sr
 
    
 class base_learning():
@@ -118,7 +104,7 @@ class online_learning(base_learning):
             self.input_ca = self.input_c[calpoints, :]
             self.output_ca = self.output_c[calpoints]
             self.Iter_tr = int(len(self.input_tr))
-            data_path = data_path_temp + '/exp_data.npz'
+            #data_path = data_path_temp + '/exp_data.npz'
             #トレーニングセットでカーネル計算
             ol_tr = eval(self.method['method'])(input=self.input_tr, dict_band=self.method['dict_band'])        
             ol_tr.dict_define(self.method['variable'])
@@ -127,31 +113,30 @@ class online_learning(base_learning):
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.learned = gd.learning(step_size=config.step_size)
             self.func_est = self.learned[0]
-            self.func_est_fin = self.func_est[:, - 1, :]
+            #self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = self.learned[1]
             self.Iter = gd.Iter
 
             #おまけ
-            savepath = 'alpha'
-            self.func_est_fin[0] = self.func_est_fin[0].reshape(-1)
-            self.func_est_fin[1] = self.func_est_fin[1].reshape(-1)
-            range_get(input_test=self.input_tr, func_est=self.func_est_fin, savepath=savepath)
+            #savepath = 'alpha'
+            #self.func_est_fin[0] = self.func_est_fin[0].reshape(-1)
+            #self.func_est_fin[1] = self.func_est_fin[1].reshape(-1)
+            #range_get(input_test=self.input_tr, func_est=self.func_est_fin, savepath=savepath)
 
             #キャリブレーションセットでカーネル計算
-            ol_c = eval(self.method['method'])(input=self.input_ca, dict_band=self.method['dict_band'])
+            #ol_c = eval(self.method['method'])(input=self.input_ca, dict_band=self.method['dict_band'])
             self.calib_vector = ol_tr.kernel_vector(self.input_ca)
             #キャリブレーションセットで区間構築
-            self.func_calib = np.zeros([len(self.alpha), 1, len(self.output_ca)])
-                        
+            self.func_calib = np.zeros([len(self.alpha), 1, len(self.output_ca)])      
             for a in range(len(self.alpha)):
                 self.func_calib[a,:,:] = np.dot(self.kernel_weight[a].T, self.calib_vector)
             
             #おまけ
-            self.input_ca = self.input_ca.reshape(-1)
-            self.func_calib[0] = self.func_calib[0].reshape(-1)
-            self.func_calib[1] = self.func_calib[1].reshape(-1)
-            savepath = 'beta'
-            range_get(input_test=self.input_ca, func_est=self.func_calib, savepath=savepath)
+            #self.input_ca = self.input_ca.reshape(-1)
+            #self.func_calib[0] = self.func_calib[0].reshape(-1)
+            #self.func_calib[1] = self.func_calib[1].reshape(-1)
+            #savepath = 'beta'
+            #range_get(input_test=self.input_ca, func_est=self.func_calib, savepath=savepath)
 
             #for i in range(self.Iter):        
                 # Pinball Moreau
@@ -178,15 +163,15 @@ class online_learning(base_learning):
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
             #おまけ
-            self.input_te = self.input_te.reshape(-1)
-            self.func_est_final[0] = self.func_est_final[0].reshape(-1)
-            self.func_est_final[1] = self.func_est_final[1].reshape(-1)
-            savepath = 'gamma'
-            range_get(input_test=self.input_te, func_est=self.func_est_final, savepath=savepath)
+            #self.input_te = self.input_te.reshape(-1)
+            #self.func_est_final[0] = self.func_est_final[0].reshape(-1)
+            #self.func_est_final[1] = self.func_est_final[1].reshape(-1)
+            #savepath = 'gamma'
+            #range_get(input_test=self.input_te, func_est=self.func_est_final, savepath=savepath)
 
     def save(self):
         data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR' 
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)

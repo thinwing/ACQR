@@ -32,16 +32,6 @@ with open('log3.txt', 'a') as f:
     f.write('start')
     f.write('\n---------------------------------------------')
 
-if config.onlyCOQKRflag == 'on':
-    for noise_type in config.noise_type_all:
-    #for noise_type in config.noise_types:        
-        for outlier_type in config.outlier_type_all:
-        #for outlier_type in config.outlier_types:
-            for outlier_rate in config.outlier_rate:
-                for i in range(1, config.trial):
-                    data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i + 1)
-                    dt.dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_type=noise_type, outlier_type=outlier_type, outlier_rate=outlier_rate)\
-
 if config.optimize_flag == 'all':
     for noise_type in config.noise_type_all:
         for outlier_type in config.outlier_type_all:
@@ -77,7 +67,7 @@ elif config.optimize_flag == 'custom':
     for noise_type in config.noise_types:
         for outlier_type in config.outlier_types:
             #for outlier_rate in config.outlier_rate:
-                outlier_rate = 0.04
+                outlier_rate = 0.05
                 with open('log3.txt', 'a') as f:
                     f.write('\nnoise_type : ' + str(noise_type))
                     f.write('\noutlier_type : ' + str(outlier_type))
@@ -94,7 +84,7 @@ elif config.optimize_flag == 'custom':
                             f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                             f.write('\n---------------------------------------------')
                             
-                        for i in range(config.trial):
+                        for i in range(1, config.trial):
                             data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')
@@ -111,10 +101,15 @@ elif config.optimize_flag == 'custom':
                                 learn.save()
                                 
                             elif eval('address.' + str(method))['processing'] == 'online':
-                                #learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                
+                                #truth_path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=' + str(i+1) + '/outlier.npz'
+                                #truth = np.load(truth_path)
                                 #grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
-                                learn = Optimize_CQR2.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
-                                grd_truth = Optimize_CQR2.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+
+                                #learn = Optimize_CQR2.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                #grd_truth = Optimize_CQR2.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 learn.pre_learning()
                                 for loss_temp in config.losses:
                                     if str(loss_temp) == 'pinball':

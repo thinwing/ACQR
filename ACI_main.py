@@ -30,7 +30,7 @@ with open('log2.txt', 'a') as f:
 for noise_type in config.noise_types:
     for outlier_type in config.outlier_types:
         #for outlier_rate in config.outlier_rate:
-        outlier_rate = 0.04
+        outlier_rate = 0.05
         with open('log2.txt', 'a') as f:
             f.write('\nnoise_type : ' + str(noise_type))
             f.write('\noutlier_type : ' + str(outlier_type))
@@ -43,7 +43,7 @@ for noise_type in config.noise_types:
                 f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                 f.write('\n---------------------------------------------')
 
-            for i in range(43, config.trial):
+            for i in range(config.trial):
                 data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                 observation = np.load(data_path + 'outlier.npz')
                 noise = np.load(data_path + 'noise.npz')
@@ -53,11 +53,15 @@ for noise_type in config.noise_types:
                 input_ACI = ACI_data[1]
                 func_est_final = ACI_data[2]
                 now = datetime.datetime.now()
-                data_path_temp = data_path
-                data_path = 'truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
-                true = np.load(data_path + 'grd_truth.npz')
-                grd_truth = true['arr_0']
-                data_path = data_path_temp
+                #data_path_temp = data_path
+                #data_path = 'truth/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate)  +'/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
+                #true = np.load(data_path + 'grd_truth.npz')
+                #grd_truth = true['arr_0']
+                #data_path = data_path_temp
+                sr_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1) + '/base/same_range.npz'
+                ground_result = np.load(sr_path)
+                grd_truth = ground_result['func_est']
+                
                 learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()

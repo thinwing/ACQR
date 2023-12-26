@@ -6,13 +6,15 @@ def outlier_create2(input, output_true, noise_real, outlier_type):
     output_noise = output
         
     if outlier_type == 'sparse':
-        arr1 = np.arange(20, 2981, 40)
-        arr2 = np.arange(40, 3001, 40)
+        arr1 = np.arange(19, 2980, 40)
+        arr2 = np.arange(39, 3000, 40)
+        #out = np.hstack((arr1, arr2))
         zero = np.zeros((3000, 1))
         for s in arr1:
-            zero[s,1] = -1 * np.random.randint(10, 101)
+            zero[s] = -1 * np.random.randint(10, 101)
         for t in arr2:
-            zero[t,1] = 1 * np.random.randint(10, 101)        
+            zero[t] = np.random.randint(10, 101)    
+        print(zero[s])    
         output = output + zero
         
     elif outlier_type == 'impulse':

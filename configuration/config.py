@@ -2,7 +2,7 @@ import numpy as np
 ### THIS IS THE CONFIG FILE ###
 
 optimize_flag = 'custom'
-data_flag = 'off'
+data_flag = 'on'
 onlyCOQKRflag = 'off'
 onlyACIflag = 'off'
 # num_divide = 3
@@ -19,10 +19,10 @@ Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
 Iter_batch = 500
-trial = 1
+trial = 10
 outlier_rate_temp = np.arange(6) * 0.02
-outlier_rate = outlier_rate_temp[:]
-# outlier_rate = np.array([0.0])
+#outlier_rate = outlier_rate_temp[:]
+outlier_rate = np.array([0.05])
 
 noise_type_all = ('normal', 'linear_expansion', 'exp_wave',)
 noise_types = ('linear_expansion',)
@@ -35,7 +35,7 @@ outlier_types = ('sparse',)
 
 noise_type = 'linear_expansion'
 outlier_type = 'sparse'
-outlier_rate_single = 0.04
+outlier_rate_single = 0.05
 
 #--------- algorithms ---------#
 num_estimator = 1000
