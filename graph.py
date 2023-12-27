@@ -56,7 +56,7 @@ class _graph():
     
 if __name__ == '__main__':
     gr = _graph()
-    gr.bo_figure(list=grp.list_graph, alpha=0.95)
+    #gr.bo_figure(list=grp.list_graph, alpha=0.95)
 
     #gr.bo_coverage(list=grp.list_graph_coverage)    
     #for index, item in enumerate(grp.loss_list):

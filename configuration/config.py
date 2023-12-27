@@ -22,7 +22,7 @@ Iter_batch = 500
 trial = 20
 outlier_rate_temp = np.arange(6) * 0.02
 #outlier_rate = outlier_rate_temp[:]
-outlier_rate = np.array([0.04])
+outlier_rate = np.array([0.05])
 
 noise_type_all = ('normal', 'linear_expansion', 'exp_wave',)
 noise_types = ('linear_expansion',)
@@ -66,13 +66,17 @@ sigma_rbf = 0.1
 #step_size = 0.1
 
 #↓これ一番いい
-#step_size = 0.025
+#step_size = 0.005
 
-#↓CQR1ではこれもいい？
+#↓CQR1はこれがいい？
 #step_size = 0.001
 
-#↓CQR1ではこれもいい？
-step_size = 0.001
+#5％の場合は0.00付近
+#0.00は区間が短い
+#0.は区間が長い
+
+#↓CQR1ではこれが一番よさそう
+step_size = 0.0075
 coherence = 10.0
 num_rff = 50 # no meaning
 

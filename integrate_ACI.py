@@ -57,7 +57,7 @@ if __name__ == '__main__':
     for alpha_range_temp in range(config.limit):
         alpha_range = np.round(0.95 - (alpha_range_temp * 0.05), 3)
     
-        data_path =  'result/text/dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/=0.04' + '/Iter=' + str(config.Iter) + '/alpha=' + str(alpha_range) 
+        data_path =  'result/text/dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/=0.05' + '/Iter=' + str(config.Iter) + '/alpha=' + str(alpha_range) 
 
         for _, method in enumerate(config.methods):
             data_integrate(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
