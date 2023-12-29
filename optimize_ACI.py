@@ -3,7 +3,22 @@ import configuration.config as config
 import configuration.address as address 
 from algorithms import *
 from os import makedirs as mkdir
+
+def gt(data_path, observation, noise, data, alpha):
+    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
+    #sr, grd_truth, same_range, range_gt_ave = ground_truth2(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
+    data_path_temp = data_path + '/base'
+    mkdir(data_path_temp, exist_ok=True)
+    data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
+    np.savez_compressed(data_path, func_est=sr, range_ave=same_range)
+    data_path = data_path_temp + '/' + str(address.ground_truth['save_name']) + '.npz'
+    np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
+    data_path = data_path_temp + '/exp_data.npz'
+    np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
    
+    #return grd_truth
+    return sr   
+
 class ACIlearning():
     def __init__(self, observation, noise, Iter, alpha, trial, outlier_rate):
     #def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate, observation_c, data_c):

@@ -20,7 +20,7 @@ if config.onlyACIflag == 'on':
     for noise_type in config.noise_type_all:
         for outlier_type in config.outlier_type_all:
             for outlier_rate in config.outlier_rate:
-                for i in range(1, config.trial):
+                for i in range(20, config.trial):
                     data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i + 1)
                     dt.dt(data_path=data_path, Iter=config.Iter, input_dim=config.input_dim, noise_type=noise_type, outlier_type=outlier_type, outlier_rate=outlier_rate)
 
@@ -43,7 +43,7 @@ for noise_type in config.noise_types:
                 f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                 f.write('\n---------------------------------------------')
 
-            for i in range(1, config.trial):
+            for i in range(20, config.trial):
                 data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
                 observation = np.load(data_path + 'outlier.npz')
                 noise = np.load(data_path + 'noise.npz')
@@ -59,14 +59,12 @@ for noise_type in config.noise_types:
                 #grd_truth = true['arr_0']
                 #data_path = data_path_temp
 
+                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
                 #sentaku
                 #sr_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1) + '/base/same_range.npz'
                 #ground_result = np.load(sr_path)
                 #grd_truth = ground_result['func_est']
-
-                grd_truth = optimize.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
-                
-                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
+                grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()
                 with open('log2.txt', 'a') as f:

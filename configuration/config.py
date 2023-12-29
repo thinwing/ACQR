@@ -19,7 +19,7 @@ Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
 Iter_batch = 500
-trial = 20
+trial = 25
 outlier_rate_temp = np.arange(6) * 0.02
 #outlier_rate = outlier_rate_temp[:]
 outlier_rate = np.array([0.05])
@@ -76,7 +76,7 @@ sigma_rbf = 0.1
 #0.は区間が長い
 
 #↓CQR1ではこれが一番よさそう
-step_size = 0.0075
+step_size = 0.001
 coherence = 10.0
 num_rff = 50 # no meaning
 
@@ -91,8 +91,8 @@ regular_pdm = np.array([0.0])
 ## Pinball Loss : Moreau Envelope
 # gamma = 0.0001
 # gamma = 100.0
-gamma = 10.0 ** (np.arange(3) - 1)
-#gamma = np.array([1000.0])
+#gamma = 10.0 ** (np.arange(5) - 1)
+gamma = np.array([100.0])
 # gamma_conditional = 0.1
 gamma_default = 10.0
 #gamma_default = 0.5
