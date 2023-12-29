@@ -58,13 +58,12 @@ for noise_type in config.noise_types:
                 #true = np.load(data_path + 'grd_truth.npz')
                 #grd_truth = true['arr_0']
                 #data_path = data_path_temp
-
-                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
-                #sentaku
                 #sr_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/alpha=0.95/trial=' + str(i+1) + '/base/same_range.npz'
                 #ground_result = np.load(sr_path)
                 #grd_truth = ground_result['func_est']
-                grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                
+                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
+                grd_truth = grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()
                 with open('log2.txt', 'a') as f:

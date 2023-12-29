@@ -102,7 +102,7 @@ elif config.optimize_flag == 'custom':
                                 learn.save()
                                 
                             elif eval('address.' + str(method))['processing'] == 'online':
-                                learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                learn = Optimize_CQR.online_learning_lo(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
                                 grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 
                                 #truth_path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=' + str(i+1) + '/outlier.npz'
