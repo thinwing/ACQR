@@ -72,7 +72,7 @@ class ACIlearning_lo():
         self.Iter = Iter
         
         self.data_path_temp = 'result/text/dim=1' + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/lo/'
+        self.data_path = self.data_path_temp + '/lo/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval_ACI(self, ground_truth, coverage, func_est_final, input):
@@ -114,7 +114,7 @@ class ACIlearning_hi():
         self.Iter = Iter
         
         self.data_path_temp = 'result/text/dim=1' + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/hi/'
+        self.data_path = self.data_path_temp + '/hi/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval_ACI(self, ground_truth, coverage, func_est_final, input):
@@ -156,7 +156,7 @@ class ACIlearning_hal():
         self.Iter = Iter
         
         self.data_path_temp = 'result/text/dim=1' + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/hal/'
+        self.data_path = self.data_path_temp + '/hal/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval_ACI(self, ground_truth, coverage, func_est_final, input):

@@ -131,7 +131,7 @@ class base_learning_lo():
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range)
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/lo/'
+        self.data_path = self.data_path_temp + '/lo/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval(self, ground_truth):
@@ -218,7 +218,7 @@ class base_learning_hi():
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range)
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/hi/'
+        self.data_path = self.data_path_temp + '/hi/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval(self, ground_truth):
@@ -305,7 +305,7 @@ class base_learning_hal():
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range)
-        self.data_path = self.data_path_temp + '/trial=' + str(trial) + '/hal/'
+        self.data_path = self.data_path_temp + '/hal/trial=' + str(trial) + '/'
         mkdir(self.data_path, exist_ok=True)
              
     def eval(self, ground_truth):
