@@ -37,7 +37,7 @@ for noise_type in config.noise_types:
                 f.write('\n---------------------------------------------')
 
             for i in range(config.trial):
-                data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/hi/' 
+                data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/hi/trial=' + str(i+1) + '/' 
                 observation = np.load(data_path + 'outlier.npz')
                 noise = np.load(data_path + 'noise.npz')
                 data = np.load(data_path + 'data.npz')
@@ -55,8 +55,8 @@ for noise_type in config.noise_types:
                 #ground_result = np.load(sr_path)
                 #grd_truth = ground_result['func_est']
                 
-                learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
-                grd_truth = optimize_ACI(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                learn = optimize_ACI.ACIlearning_hi(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
+                grd_truth = grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()
                 with open('log4.txt', 'a') as f:

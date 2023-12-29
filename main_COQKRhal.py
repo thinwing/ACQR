@@ -53,7 +53,7 @@ if config.optimize_flag == 'all':
                                 learn.save()
                                 
                             elif eval('address.' + config.method)['processing'] == 'online':
-                                learn = optimize.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + method), trial=i+1)
+                                learn = optimize.online_learning_hal(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + method), trial=i+1)
                                 grd_truth = optimize.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 learn.pre_learning()
                                 for loss in config.loss_all:
@@ -86,7 +86,7 @@ elif config.optimize_flag == 'custom':
                             f.write('\n---------------------------------------------')
                             
                         for i in range(config.trial):
-                            data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/hal/' 
+                            data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/hal/trial=' + str(i+1) + '/' 
                             observation = np.load(data_path + 'outlier.npz')
                             noise = np.load(data_path + 'noise.npz')
                             data = np.load(data_path + 'data.npz')
@@ -102,7 +102,7 @@ elif config.optimize_flag == 'custom':
                                 learn.save()
                                 
                             elif eval('address.' + str(method))['processing'] == 'online':
-                                learn = Optimize_CQR.online_learning(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                learn = Optimize_CQR.online_learning_hal(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
                                 grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 
                                 #truth_path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=' + str(i+1) + '/outlier.npz'
