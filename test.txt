@@ -1,0 +1,11 @@
+# グラフ作成時
+python graph.py
+
+# 実験を行う
+python main.py
+
+# 各trialのデータを平均化して統合する
+python integrate.py
+
+# パソコンが落ちても実験を継続するコマンド
+nohup python main.py >/dev/null 2>&1 &
