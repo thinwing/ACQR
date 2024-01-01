@@ -37,7 +37,7 @@ def figACI(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     
     # ground_truth = np.load(ground_truth_path)
     # ground_truth_func = (ground_truth['func_est'])[:, input_test_ord]
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/ACI'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/ACI'
     mkdir(save_path, exist_ok=True)
     
     for index, item in enumerate(list_flatten):
@@ -50,7 +50,7 @@ def figACI(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         print(item)
     
         # get the path
-        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.04/Iter=3000/alpha=0.95/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=0.5/ACI.npz'
+        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=0.5/ACI.npz'
         
         # load the data
         method = np.load(data_path_detail)
@@ -65,13 +65,13 @@ def figACI(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('$x$', fontsize=grp.font_size)
         ax.set_ylabel('$y$', fontsize=grp.font_size)
-        #ax.set_ylim(-2, 5)
+        ax.set_ylim(-5, 10)
         #ax.set_xlim(0, 1)
         
         ax.legend(fontsize=32)
         plt.tick_params(labelsize=32)
         ax.grid()
-        save_name = save_path + '/fig_' + str(item)+ '.pdf'
+        save_name = save_path + '/fig_CQR' + str(item)+ '.pdf'
         plt.savefig(save_name, bbox_inches='tight')
 
         plt.clf()
@@ -142,13 +142,13 @@ def fig_rangeACI(data_path, trial , list=np.array([['same_range'],['ground_truth
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('x', fontsize=grp.font_size)
         ax.set_ylabel('Range', fontsize=grp.font_size)
-        #ax.set_ylim(0, 5)
+        ax.set_ylim(-5, 10)
         
         # plt.tick_params(labelsize=grp.ticks)
         ax.legend(fontsize=16)
         ax.grid()
     
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/=0.04/Iter=3000/alpha=0.95/trial=' + str(trial+1) +'/ACI'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/trial=' + str(trial+1) +'/ACI'
     mkdir(save_path, exist_ok=True)
     save_name = save_path + '/fig_range.pdf'
     plt.savefig(save_name, bbox_inches='tight')
@@ -168,7 +168,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     data_path_temp = data_path + '/base/exp_data.npz'
     data = np.load(data_path_temp)
     
-    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
     path = np.load(input_path)
     print('path')
     print(path.files)
@@ -193,7 +193,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     
     # ground_truth = np.load(ground_truth_path)
     # ground_truth_func = (ground_truth['func_est'])[:, input_test_ord]
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR'
     mkdir(save_path, exist_ok=True)
     
     for index, item in enumerate(list_flatten):
@@ -206,7 +206,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         print(item)
     
         # get the path
-        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
 
         # load the data
         method = np.load(data_path_detail)
@@ -297,15 +297,15 @@ def fig_rangeCQR(data_path, trial , list=np.array([['same_range'],['ground_truth
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('x', fontsize=grp.font_size)
         ax.set_ylabel('Range', fontsize=grp.font_size)
-        #ax.set_ylim(0, 5)
+        ax.set_ylim(-5, 15)
         
         # plt.tick_params(labelsize=grp.ticks)
         ax.legend(fontsize=16)
         ax.grid()
     
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR'
     mkdir(save_path, exist_ok=True)
-    save_name = save_path + '/fig_range.pdf'
+    save_name = save_path + '/fig_range_CQR.pdf'
     plt.savefig(save_name, bbox_inches='tight')
 
     plt.clf()

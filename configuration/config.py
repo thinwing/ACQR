@@ -19,7 +19,7 @@ Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
 Iter_batch = 500
-trial = 26
+trial = 25
 outlier_rate_temp = np.arange(6) * 0.02
 #outlier_rate = outlier_rate_temp[:]
 outlier_rate = np.array([0.05])
@@ -45,7 +45,7 @@ num_split = 0
 
 ## Quantile Regression Neural Network
 num_hidden_layer = 64
-lr = 0.0005
+lr = 0.0003
 dropout = 0.2
 activation = 'relu'
 
@@ -66,17 +66,20 @@ sigma_rbf = 0.1
 #step_size = 0.1
 
 #↓これ一番いい
-#step_size = 0.005
+#step_size = 0.0005
 
-#↓CQR1はこれがいい？
+#↓CQR1はこれがよさげ？
 #step_size = 0.001
 
 #5％の場合は0.00付近
 #0.00は区間が短い
 #0.は区間が長い
 
+#↓従来手法強すぎ伝説
+#step_size = 0.00025
+
 #↓CQR1ではこれが一番よさそう
-step_size = 0.001
+step_size = 0.0003
 coherence = 10.0
 num_rff = 50 # no meaning
 

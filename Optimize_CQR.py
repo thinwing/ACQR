@@ -14,6 +14,7 @@ def gtCQR(data_path, observation, noise, data, alpha):
     obse_x, obse_d = np.array_split(obse_c, 2, 0)
     noise_x,noise_d = np.array_split(noise_c, 2, 0)
     sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=true_d, output_test=obse_d, noise=noise_d, alpha=alpha)
+    sr2, grd_truth2, same_range2, range_gt_ave2 = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
     data_path_temp = data_path + '/base/CQR'
     mkdir(data_path_temp, exist_ok=True)
     data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
@@ -22,7 +23,7 @@ def gtCQR(data_path, observation, noise, data, alpha):
     np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
     data_path = data_path_temp + '/exp_data.npz'
     np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
-    return sr
+    return sr, sr2
 
 class base_learning():
     def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate):
@@ -42,8 +43,6 @@ class base_learning():
         
         self.alpha = alpha
         self.Iter = int(len(self.output_test)/3)
-        print('do')
-        print(self.Iter)
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
@@ -53,7 +52,8 @@ class base_learning():
     def eval(self, ground_truth):
         self.coverage_all = coverage(func_est=self.func_est_final, output_test=self.output_te, alpha=self.alpha, Iter=self.Iter, method=self.method)
         # print(self.coverage_all)
-        self.coverage = coverage(func_est=self.func_est_final, output_test=self.output_te, alpha=self.alpha, Iter=self.Iter, method=self.method)
+        #self.coverage = coverage(func_est=self.func_est_final, output_test=self.output_te, alpha=self.alpha, Iter=self.Iter, method=self.method)
+        self.coverage = coverage(func_est=self.func_est_ul, output_test=self.output_test, alpha=self.alpha, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         num_div = int(len(self.coverage[0]) / 10)
         print("coverage_")
@@ -67,7 +67,8 @@ class base_learning():
         print("coverage")
         for i in range(10):
             print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
-        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        #self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_ul, gt=ground_truth, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         print("error")
         print(10 * np.log10(self.coverage_db[2]).reshape(1, -1))
@@ -129,14 +130,17 @@ class online_learning(base_learning):
             self.Iter_tr = int(len(self.input_tr))
             #data_path = data_path_temp + '/exp_data.npz'
             #トレーニングセットでカーネル計算
-            ol_tr = eval(self.method['method'])(input=self.input_tr, dict_band=self.method['dict_band'])        
+            ol_tr = eval(self.method['method'])(input=self.input_tr, dict_band=self.method['dict_band'])
             ol_tr.dict_define(self.method['variable'])
             self.train_vector = ol_tr.kernel_vector(self.input_tr)
             #トレーニングセットで重み計算
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.learned = gd.learning(step_size=config.step_size)
             self.func_est = self.learned[0]
-            #self.func_est_fin = self.func_est[:, - 1, :]
+            self.func_est_semi = self.func_est[:, - 1, :]
+            self.func_est_fin = np.zeros([len(self.alpha), 1, len(self.output_tr)])      
+            for a in range(len(self.alpha)):
+                self.func_est_fin[a,:,:] = self.func_est_semi[a]
             self.kernel_weight = self.learned[1]
 
             #おまけ
@@ -167,6 +171,10 @@ class online_learning(base_learning):
             self.func_high_c = self.func_calib[1].T
             self.scores_c = np.maximum(self.output_ca - self.func_high_c.reshape(-1, 1), self.func_low_c.reshape(-1, 1) - self.output_ca)
             self.confQuantAdapt_c = np.percentile(self.scores_c, config.alpha_range * 100)
+            #print('pray')
+            #print(self.scores_c)
+            #print(config.alpha_range)
+            #print(self.confQuantAdapt_c)            
             self.X_c = np.full([len(self.scores_c), 1], self.confQuantAdapt_c)
 
             #テストセットでカーネル計算
@@ -183,7 +191,17 @@ class online_learning(base_learning):
             #self.coverage_ht = np.where((self.higher_t - self.output_te > 0), 1, 0)
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
-
+            
+            #self.func_est = self.learned[0]
+            self.Y_c = np.full([len(self.output_tr), 1], self.confQuantAdapt_c)
+            self.Z_c = np.full([len(self.output_ca), 1], self.confQuantAdapt_c)
+            self.func_low_tr = self.func_est_fin[0].T - self.Y_c.reshape(-1, 1)
+            self.func_high_tr = self.func_est_fin[1].T + self.Y_c.reshape(-1, 1)
+            self.func_low_c = self.func_calib[0].T - self.Z_c.reshape(-1, 1)
+            self.func_high_c = self.func_calib[1].T + self.Z_c.reshape(-1, 1)
+            self.func_est_tr = np.hstack((self.func_low_tr, self.func_high_tr)).T
+            self.func_est_c = np.hstack((self.func_low_c, self.func_high_c)).T
+            self.func_est_ul = np.hstack((self.func_est_tr, self.func_est_c, self.func_est_final))
             #おまけ
             #self.input_te = self.input_te.reshape(-1)
             #self.func_est_final[0] = self.func_est_final[0].reshape(-1)
@@ -196,7 +214,7 @@ class online_learning(base_learning):
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, func_est_all=self.func_est_ul, input_te = self.input_te, input_test = self.input_test)
    
 class base_learning_lo():
     def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate):
@@ -216,8 +234,6 @@ class base_learning_lo():
         
         self.alpha = alpha
         self.Iter = int(len(self.output_test)/3)
-        print('do')
-        print(self.Iter)
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
@@ -241,7 +257,7 @@ class base_learning_lo():
         print("coverage")
         for i in range(10):
             print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
-        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_ul, gt=ground_truth, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         print("error")
         print(10 * np.log10(self.coverage_db[2]).reshape(1, -1))
@@ -310,6 +326,10 @@ class online_learning_lo(base_learning_lo):
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.learned = gd.learning(step_size=config.step_size)
             self.func_est = self.learned[0]
+            self.func_est_semi = self.func_est[:, - 1, :]
+            self.func_est_fin = np.zeros([len(self.alpha), 1, len(self.output_tr)])      
+            for a in range(len(self.alpha)):
+                self.func_est_fin[a,:,:] = self.func_est_semi[a]
             #self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = self.learned[1]
 
@@ -358,6 +378,15 @@ class online_learning_lo(base_learning_lo):
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
+            self.Y_c = np.full([len(self.output_tr), 1], self.confQuantAdapt_c)
+            self.Z_c = np.full([len(self.output_ca), 1], self.confQuantAdapt_c)
+            self.func_low_tr = self.func_est_fin[0].T - self.Y_c.reshape(-1, 1)
+            self.func_high_tr = self.func_est_fin[1].T + self.Y_c.reshape(-1, 1)
+            self.func_low_c = self.func_calib[0].T - self.Z_c.reshape(-1, 1)
+            self.func_high_c = self.func_calib[1].T + self.Z_c.reshape(-1, 1)
+            self.func_est_tr = np.hstack((self.func_low_tr, self.func_high_tr)).T
+            self.func_est_c = np.hstack((self.func_low_c, self.func_high_c)).T
+            self.func_est_ul = np.hstack((self.func_est_tr, self.func_est_c, self.func_est_final))
             #おまけ
             #self.input_te = self.input_te.reshape(-1)
             #self.func_est_final[0] = self.func_est_final[0].reshape(-1)
@@ -370,7 +399,7 @@ class online_learning_lo(base_learning_lo):
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, func_est_all=self.func_est_ul,  input_te = self.input_te, input_test = self.input_test)
 
 class base_learning_hi():
     def __init__(self, observation, noise, data, alpha, method, trial, outlier_rate):
@@ -390,8 +419,6 @@ class base_learning_hi():
         
         self.alpha = alpha
         self.Iter = int(len(self.output_test)/3)
-        print('do')
-        print(self.Iter)
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
@@ -415,7 +442,7 @@ class base_learning_hi():
         print("coverage")
         for i in range(10):
             print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
-        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_ul, gt=ground_truth, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         print("error")
         print(10 * np.log10(self.coverage_db[2]).reshape(1, -1))
@@ -484,6 +511,10 @@ class online_learning_hi(base_learning_hi):
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.learned = gd.learning(step_size=config.step_size)
             self.func_est = self.learned[0]
+            self.func_est_semi = self.func_est[:, - 1, :]
+            self.func_est_fin = np.zeros([len(self.alpha), 1, len(self.output_tr)])      
+            for a in range(len(self.alpha)):
+                self.func_est_fin[a,:,:] = self.func_est_semi[a]
             #self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = self.learned[1]
 
@@ -532,6 +563,15 @@ class online_learning_hi(base_learning_hi):
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
+            self.Y_c = np.full([len(self.output_tr), 1], self.confQuantAdapt_c)
+            self.Z_c = np.full([len(self.output_ca), 1], self.confQuantAdapt_c)
+            self.func_low_tr = self.func_est_fin[0].T - self.Y_c.reshape(-1, 1)
+            self.func_high_tr = self.func_est_fin[1].T + self.Y_c.reshape(-1, 1)
+            self.func_low_c = self.func_calib[0].T - self.Z_c.reshape(-1, 1)
+            self.func_high_c = self.func_calib[1].T + self.Z_c.reshape(-1, 1)
+            self.func_est_tr = np.hstack((self.func_low_tr, self.func_high_tr)).T
+            self.func_est_c = np.hstack((self.func_low_c, self.func_high_c)).T
+            self.func_est_ul = np.hstack((self.func_est_tr, self.func_est_c, self.func_est_final))
             #おまけ
             #self.input_te = self.input_te.reshape(-1)
             #self.func_est_final[0] = self.func_est_final[0].reshape(-1)
@@ -544,7 +584,7 @@ class online_learning_hi(base_learning_hi):
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, func_est_all=self.func_est_ul, input_te = self.input_te, input_test = self.input_test)
 
 
 class base_learning_hal():
@@ -565,8 +605,6 @@ class base_learning_hal():
         
         self.alpha = alpha
         self.Iter = int(len(self.output_test)/3)
-        print('do')
-        print(self.Iter)
         self.method = method
         
         self.data_path_temp = 'result/text/dim=' + str(len(self.input_train[0])) + '/' + str(noise['noise_type']) + '/' + str(observation['outlier_type']) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(self.Iter) + '/alpha=' + str(alpha_range) 
@@ -590,7 +628,7 @@ class base_learning_hal():
         print("coverage")
         for i in range(10):
             print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
-        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_ul, gt=ground_truth, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         print("error")
         print(10 * np.log10(self.coverage_db[2]).reshape(1, -1))
@@ -659,6 +697,10 @@ class online_learning_hal(base_learning_hal):
             gd = grad(alpha=self.alpha, loss=loss, Iter=self.Iter_tr, kernel_vector=self.train_vector, kernel_vector_eval=self.train_vector, output_train=self.output_tr)
             self.learned = gd.learning(step_size=config.step_size)
             self.func_est = self.learned[0]
+            self.func_est_semi = self.func_est[:, - 1, :]
+            self.func_est_fin = np.zeros([len(self.alpha), 1, len(self.output_tr)])      
+            for a in range(len(self.alpha)):
+                self.func_est_fin[a,:,:] = self.func_est_semi[a]
             #self.func_est_fin = self.func_est[:, - 1, :]
             self.kernel_weight = self.learned[1]
 
@@ -707,6 +749,15 @@ class online_learning_hal(base_learning_hal):
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
+            self.Y_c = np.full([len(self.output_tr), 1], self.confQuantAdapt_c)
+            self.Z_c = np.full([len(self.output_ca), 1], self.confQuantAdapt_c)
+            self.func_low_tr = self.func_est_fin[0].T - self.Y_c.reshape(-1, 1)
+            self.func_high_tr = self.func_est_fin[1].T + self.Y_c.reshape(-1, 1)
+            self.func_low_c = self.func_calib[0].T - self.Z_c.reshape(-1, 1)
+            self.func_high_c = self.func_calib[1].T + self.Z_c.reshape(-1, 1)
+            self.func_est_tr = np.hstack((self.func_low_tr, self.func_high_tr)).T
+            self.func_est_c = np.hstack((self.func_low_c, self.func_high_c)).T
+            self.func_est_ul = np.hstack((self.func_est_tr, self.func_est_c, self.func_est_final))
             #おまけ
             #self.input_te = self.input_te.reshape(-1)
             #self.func_est_final[0] = self.func_est_final[0].reshape(-1)
@@ -719,4 +770,4 @@ class online_learning_hal(base_learning_hal):
         mkdir(data_path, exist_ok=True) 
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final, func_est_all=self.func_est_ul, input_te = self.input_te, input_test = self.input_test)

@@ -63,7 +63,7 @@ for noise_type in config.noise_types:
                 #grd_truth = ground_result['func_est']
                 
                 learn = optimize_ACI.ACIlearning(observation=observation, noise=noise, Iter=config.Iter, alpha=alpha, trial=i+1, outlier_rate=outlier_rate)
-                grd_truth = grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                grd_truth = optimize_ACI.gt(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                 learn.eval_ACI(ground_truth=grd_truth, coverage=coverage, func_est_final=func_est_final, input=input_ACI)
                 learn.save_ACI()
                 with open('log2.txt', 'a') as f:

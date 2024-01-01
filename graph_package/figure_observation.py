@@ -71,8 +71,8 @@ def fig(data_path, list=np.array([['same_range'],['ground_truth']]), loss=False,
         ax.set_ylabel('$y$', fontsize=grp.font_size)
         
         #調整しましょう
-        ax.set_ylim(-5, 5)
-        ax.set_xlim(0, 1)
+        ax.set_ylim(-5, 10)
+        #ax.set_xlim(0, 1)
         
         ax.legend(fontsize=32)
         plt.tick_params(labelsize=32)
@@ -143,7 +143,7 @@ def fig_range(data_path, list=np.array([['same_range'],['ground_truth']]), loss=
         # ax[index].set_title(str(eval('grp.' + str(item))['fig_name']), fontsize=grp.font_size)
         ax.set_xlabel('x', fontsize=grp.font_size)
         ax.set_ylabel('Range', fontsize=grp.font_size)
-        #ax.set_ylim(0, 5)
+        ax.set_ylim(-5, 10)
         
         # plt.tick_params(labelsize=grp.ticks)
         ax.legend(fontsize=16)

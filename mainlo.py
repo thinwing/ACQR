@@ -2,7 +2,7 @@ import graph
 #import data as dt
 import data2 as dt
 import optimize
-from integrate import data_integrate as integrate
+from integrate import data_integrate_lo as integrate
 
 import datetime
 import configuration.config as config

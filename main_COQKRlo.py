@@ -4,7 +4,7 @@ import optimize
 import Optimize_CQR
 import Optimize_CQR2
 from integrate import data_integrate as integrate
-from integrate import data_integrate_CQR as integrate_CQR
+from integrate import data_integrate_CQRlo as integrate_CQR
 from algorithms.online.gradient_descent import online_learning as grad
 
 import datetime
@@ -103,7 +103,8 @@ elif config.optimize_flag == 'custom':
                                 
                             elif eval('address.' + str(method))['processing'] == 'online':
                                 learn = Optimize_CQR.online_learning_lo(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
-                                grd_truth = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                grd = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                grd_truth = grd[1]
                                 
                                 #truth_path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=' + str(i+1) + '/outlier.npz'
                                 #truth = np.load(truth_path)

@@ -5,24 +5,9 @@ import random
 from algorithms import *
 from os import makedirs as mkdir
 
-def gt(data_path, observation, noise, data, alpha):
-    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)    
-    data_path_temp = data_path + '/base'
-    mkdir(data_path_temp, exist_ok=True)
-    data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
-    np.savez_compressed(data_path, func_est=sr, range_ave=same_range)
-    data_path = data_path_temp + '/' + str(address.ground_truth['save_name']) + '.npz'
-    np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
-    data_path = data_path_temp + '/exp_data.npz'
-    np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
-   
-    return grd_truth
-
 def gtCQR(data_path, observation, noise, data, alpha):
-    true_a, true_b, true_c = np.array_split(data['output_true_test'], 3, 0)
-    obse_a, obse_b, obse_c = np.array_split(observation['output_test'], 3, 0)
-    noise_a,noise_b,noise_c = np.array_split(noise['noise_test'], 3, 0)
-    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=true_c, output_test=obse_c, noise=noise_c, alpha=alpha)
+    sr, grd_truth, same_range, range_gt_ave = ground_truth(output_true_test=data['output_true_test'], output_test=observation['output_test'], noise=noise['noise_test'], alpha=alpha)
+    #(output_true_test=self.output_true_test, output_test=self.output_test, noise=self., alpha=alpha)
     data_path_temp = data_path + '/base/CQR'
     mkdir(data_path_temp, exist_ok=True)
     data_path = data_path_temp + '/' + str(address.same_range['save_name']) + '.npz'
@@ -31,7 +16,7 @@ def gtCQR(data_path, observation, noise, data, alpha):
     np.savez_compressed(data_path, func_est=grd_truth, range_ave=range_gt_ave)
     data_path = data_path_temp + '/exp_data.npz'
     np.savez_compressed(data_path, input_train=data['input_train'], input_test=data['input_test'], output_true_train=data['output_true_train'], output_true_test=data['output_true_test'], observation_train=observation['output_train'], observation_test=observation['output_test']) 
-    return grd_truth
+    return sr
 
    
 class base_learning():
@@ -59,7 +44,7 @@ class base_learning():
         mkdir(self.data_path, exist_ok=True)
              
     def eval(self, ground_truth):
-        self.coverage_all = coverage(func_est=self.func_est_final, output_test=self.output_te, alpha=self.alpha, Iter=self.Iter, method=self.method)
+        self.coverage_all = coverage(func_est=self.func_est_end, output_test=self.output_test, alpha=self.alpha, Iter=self.Iter, method=self.method)
         # print(self.coverage_all)
         self.coverage = coverage(func_est=self.func_est_final, output_test=self.output_te, alpha=self.alpha, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
@@ -75,7 +60,7 @@ class base_learning():
         print("coverage")
         for i in range(10):
             print((self.coverage[1,i*num_div:i*num_div+5] - self.coverage[0,i*num_div:i*num_div+5]).reshape(1, -1))
-        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_final, gt=ground_truth, Iter=self.Iter, method=self.method)
+        self.range_func_est_ave, self.coverage_db = error(func_est=self.func_est_end, gt=ground_truth, Iter=self.Iter, method=self.method)
         print("-----------------------------------")
         print("error")
         print(10 * np.log10(self.coverage_db[2]).reshape(1, -1))
@@ -110,13 +95,23 @@ class online_learning(base_learning):
             print(self.Iter)
             self.number = list(range(config.Iter))
             self.number_shuffle = random.sample(self.number, config.Iter)
-            self.number_tr, self.number_ca, self.number_te = np.array_split(self.number_shuffle, 3, 0)
+            chunk_size = len(self.number_shuffle) // 3
+            part1 = self.number_shuffle[:chunk_size]
+            part2 = self.number_shuffle[chunk_size: 2 * chunk_size]
+            part3 = self.number_shuffle[2 * chunk_size:]
+            #self.number_a, self.number_b, self.number_c = np.array_split(self.number_shuffle, 3, 0)
+            #self.number_tr = np.vstack((self.number_a, self.number_b))
+            self.number_tr = part1 + part2
+            chunker = len(part3) // 2
+            self.number_ca = part3[:chunker]
+            self.number_te = part3[chunker:]
+            #np.array_split(self.number_shuffle, 3, 0)
             self.input_tr = self.input_train[self.number_tr, :]
-            self.output_tr = self.output_true_train[self.number_tr]
+            self.output_tr = self.output_test[self.number_tr]
             self.input_ca = self.input_train[self.number_ca, :]
-            self.output_ca = self.output_true_train[self.number_ca]
+            self.output_ca = self.output_test[self.number_ca]
             self.input_te = self.input_train[self.number_te, :]
-            self.output_te = self.output_true_train[self.number_te]
+            self.output_te = self.output_test[self.number_te]
             self.Iter_tr = int(len(self.input_tr))
             #トレーニングセットでカーネル計算
             ol_tr = eval(self.method['method'])(input=self.input_tr, dict_band=self.method['dict_band'])        
@@ -143,6 +138,10 @@ class online_learning(base_learning):
             self.func_high_c = self.func_calib[1].T
             self.scores_c = np.maximum(self.output_ca - self.func_high_c.reshape(-1, 1), self.func_low_c.reshape(-1, 1) - self.output_ca)
             self.confQuantAdapt_c = np.percentile(self.scores_c, config.alpha_range * 100)
+            print('pray')
+            print(self.scores_c)
+            print(config.alpha_range)
+            print(self.confQuantAdapt_c)
             self.X_c = np.full([len(self.scores_c), 1], self.confQuantAdapt_c)
             #テストセットでカーネル計算
             self.test_vector = ol_tr.kernel_vector(self.input_te)
@@ -159,9 +158,22 @@ class online_learning(base_learning):
             #XX = np.sum(self.coverage_ht - self.coverage_lt)
             self.func_est_final = np.hstack((self.lower_t, self.higher_t)).T
 
+            self.final_vector = ol_tr.kernel_vector(self.input_test)
+            #testセットで区間構築
+            self.func_final = np.zeros([len(self.alpha), 1, len(self.output_test)])
+            for a in range(len(self.alpha)):
+                self.func_final[a,:,:] = np.dot(self.kernel_weight[a].T, self.final_vector)
+            
+            self.Z_c = np.full([len(self.output_test), 1], self.confQuantAdapt_c)
+            self.func_low_f = self.func_final[0].T
+            self.func_high_f = self.func_final[1].T
+            self.lower_f = self.func_low_f.reshape(-1, 1) - self.Z_c.reshape(-1, 1)
+            self.higher_f = self.func_high_f.reshape(-1, 1) + self.Z_c.reshape(-1, 1)
+            self.func_est_end = np.hstack((self.lower_f, self.higher_f)).T
+
     def save(self):
         data_path = self.data_path + '/online/' + str(self.loss['loss']) + '/\u03b3=' + str(self.loss['gamma']) + '/CQR' 
         mkdir(data_path, exist_ok=True)
         data_path = data_path + '/' + str(self.method['save_name']) + '.npz'
         print(data_path)
-        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.input_te)
+        np.savez_compressed(data_path, coverage=self.coverage, coverage_all=self.coverage_all, range_ave=self.range_func_est_ave, coverage_db=self.coverage_db, func_est=self.func_est_final,  input_te = self.number_te, input_ca = self.number_ca, input_tr = self.number_tr, func_est_full=self.func_est_end)

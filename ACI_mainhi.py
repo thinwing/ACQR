@@ -36,7 +36,7 @@ for noise_type in config.noise_types:
                 f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                 f.write('\n---------------------------------------------')
 
-            for i in range(config.trial):
+            for i in range(12, config.trial):
                 data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/hi/' 
                 observation = np.load(data_path + 'outlier.npz')
                 noise = np.load(data_path + 'noise.npz')
