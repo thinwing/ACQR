@@ -94,8 +94,8 @@ regular_pdm = np.array([0.0])
 ## Pinball Loss : Moreau Envelope
 # gamma = 0.0001
 # gamma = 100.0
-#gamma = 10.0 ** (np.arange(5) - 1)
-gamma = np.array([100.0, 1000.0])
+gamma = 10.0 ** (np.arange(5) - 1)
+#gamma = np.array([100.0, 1000.0])
 # gamma_conditional = 0.1
 gamma_default = 10.0
 #gamma_default = 0.5

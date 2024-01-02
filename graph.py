@@ -41,6 +41,15 @@ class _graph():
         gamma_coverage(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         gamma_error(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         
+        gamma_coveragehi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        gamma_errorhi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        
+        gamma_coveragelo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        gamma_errorlo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        
+        gamma_coveragehal(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        gamma_errorhal(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        
         #gamma_coverage3(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         #gamma_error3(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         

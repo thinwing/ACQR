@@ -2,14 +2,14 @@ import graph
 #import data as dt
 import data2 as dt
 import optimize
-from integrate import data_integrate_hi as integrate
-from integrate import data_integrate_CQRhi as integrateCQR
+#from integrate import data_integrate_hi as integrate
+#from integrate import data_integrate_CQRhi as integrateCQR
 
 #from integrate import data_integrate_lo as integrate
 #from integrate import data_integrate_CQRlo as integrateCQR
 
-#from integrate import data_integrate_hal as integrate
-#from integrate import data_integrate_CQRhal as integrateCQR
+from integrate import data_integrate_hal as integrate
+from integrate import data_integrate_CQRhal as integrateCQR
 
 
 import datetime

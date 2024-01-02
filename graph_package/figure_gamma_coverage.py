@@ -78,7 +78,7 @@ def gamma_coverage(data_path, loss_list, method='single_kernel', alpha=config.al
 # comparative ACI 
         for index_gamma, gamma_temp in enumerate(gamma):
             # data load
-            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/trial=1/online/pinball_moreau' + '/\u03b3=0.5' + '/ACI.npz'
+            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/online/pinball_moreau/ACI.npz'
 
             print(data_path_detail)
             method_result = np.load(data_path_detail)
@@ -197,7 +197,7 @@ def gamma_error(data_path, loss_list, method='single_kernel', alpha=config.alpha
 # comparative ACI
             for index_gamma, gamma_temp in enumerate(gamma):
                 # data load
-                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/trial=1/online/pinball_moreau' + '/\u03b3=0.5' + '/ACI.npz'
+                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/=0.05/Iter=3000/alpha=0.95/online/pinball_moreau/ACI.npz'
                 
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 

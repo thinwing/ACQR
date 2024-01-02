@@ -21,6 +21,15 @@ from .figure_gamma_3 import gamma_error3
 from .figure_gamma_coverage import gamma_coverage
 from .figure_gamma_coverage import gamma_error
 
+from .figure_gamma_coveragehal import gamma_coveragehal
+from .figure_gamma_coveragehal import gamma_errorhal
+
+from .figure_gamma_coveragehi import gamma_coveragehi
+from .figure_gamma_coveragehi import gamma_errorhi
+
+from .figure_gamma_coveragelo import gamma_coveragelo
+from .figure_gamma_coveragelo import gamma_errorlo
+
 from .figure_gamma_coverage_online import comp_proposed_coverage as comp_proposed_coverage_gamma
 from .figure_gamma_coverage_online import comp_proposed_coverage_db as comp_proposed_coverage_gamma_db
 
