@@ -1,0 +1,484 @@
+ちゃんとトイデータの中身を見ろ
+ヒストグラムだと分かりづらいのでエクセルに表示
+テキトーにやるな‼
+あと，外れ値は自由に設定していい
+
+まずは平均5時間を目指せ
+調べたいことをYoutubeで見るのどう？
+三田さん
+
+CQRのカバレッジレートは以下のパスからアクセスできる
+result/text/dim=1/linear_expansion/sparse/outlier_rate=0.04/Iter=1000/alpha=0.95/trial=1/online/pinball_moreau/γ=0.1/CQR100/multi_kernel.npz
+
+つい1日遊んじゃう日を無くすべし
+火曜は必ず学校行く日にする
+文章を考えるとかでWifi必要ない時は機内モードに
+調べ物は夜やろう(構築とかデッキとか何買うかとか，あとどうやったら自分の欠点直せるかとか)
+最初の1時間はダラダラしやすいのでここは心の強さで回避
+ネットの意見と自分の意見が一致したときの気持ちよさを忘れろ
+
+Coverageは区間，Low，Highの順番
+
+俺の傾向として，ゲームの続きを縛ってもネットでその先調べて時間使っちゃって意味ないことがある
+ストーリークリアしてもやりこみ要素調べる，後は乾燥漁っちゃうとか
+ネットの感想見るのをやめないか，キリがないし
+→Pixiv百科事典やWiki(アニヲタは少し脱線しやすいので注意)が分かりやすくていい
+まとめサイトや掲示板といったキリがないものは避ける
+→この時点で気持ちの切り替えが出来てないから他のコンテンツやるべきかも(好きなコンテンツはこれだけじゃないはず)
+作品接種した後の翌日は学校行くべきかもな
+→それを無くすか，いっそ思いっきりあそんじゃうか
+ちゃんと自分の欠点は把握できるようにしたいよ
+
+朝のルーティンが大事
+
+午前ダラダラすると午後もダラダラするらしいよ
+
+つい遊ぶ日もそうだし，途中で脱線する日も無くす
+
+やる気なくても長い休憩を作らない(それやるくらいなら寝る)
+やっぱり勉強中に音楽聞くのやめろ
+1/9，1/16→1/16で決定！
+相手にメールで細かい情報を伝える
+土曜日でも良かった
+研究はワクワクした方がいいよ
+報告連絡相談
+定式化はCQRの論文を参考にするといいかも
+
+足助さんにB4のメールを聞く
+B4に全員報告
+
+横軸，縦軸エラーを作る(滑らかなグラフが求められてる)
+短文で区切る，報告書つくりめっちゃ下手
+分解能が低い，中身がどうなっているのかわからない
+
+Tinit
+
+論旨を書く
+シミュレーションの結論から論旨を書く必要がある
+ちゃんと97.5％，2.5％になってるか確認
+
+インクルード
+何をやるか分からないときは小さくていいから出来ることをやる(Latex実装とか，そういう細かい作業)
+月曜忙しくなるよ(笑)
+まずは従来手法を理解しろ
+→従来手法では正確な推定が出来ていないと考えられる
+フーパも買う
+参考文献は10個ほしい
+ありがとうを言いそびれる
+やるべきことが分からなくなったらちゃんと先生とディスカッション
+理想はやるべきことが分からなくなる前にディスカッション
+ACIをTrial繰り返すかどうか？
+頑張らなくていい所で頑張って，頑張らなきゃな所で頑張らないのがお前だ，分かったか？
+
+やる気は出る
+ただ途中で脱線する
+
+何時には帰る(そこそこの時間)→まだ帰りたくなかったら続ける
+↑これを繰り返す
+家でもこれ結構使えそう
+
+何時にはゲームを少しやる→まだゲームをやりたくなかったら(？)続ける
+
+寝坊した日こそ学校行こう
+明日は論文を書く
+何もやるべきことがない時は学校で勉強しよう
+忙しくないときは脱線してもいいよ
+起きて1時間
+横に積み上げる
+プログラムは元の奴から変えなくていい
+
+日程，9以降
+
+figrange_ACIにはバグがあります
+それはoutputの位置がおかしいという事
+output\teがラスト1000個を使ってる
+
+
+シフト，ちゃんとバツつけとくべきだったな
+応用例で文字稼ぎ
+
+マーシャルアーツつよい
+今日の夜なんかデュエパレベル1考えたい
+聖獣王ペガサス
+黒エンジェル
+城岸
+
+帰ってきたら真っ先にγ＝0.5入れろ
+帰ってきてまず何やるか書いてから帰る
+外れ値を増やす(outlierrate)
+NextStage
+体言止めでは〇しない
+日曜まででもいい
+出しましただけでいい
+1/8にすべてが終わる
+それまでに解決しよう
+調整さんで決める
+卒論大一行締め切りは12・25
+カーネルじゃなくていいんじゃない？
+チューニングは前日にやるもんでない
+
+プログラム飽きたら文章考えるやつやろう
+Outlier＿rate帰る
+
+i.i.d.から生成される
+分位点はパーセント分位点で書こう
+
+エネは序盤はどうでもいい
+なのでどのタイミングで書くにするかルーティン化
+ちゃんとタイミングを確認
+
+今日
+普通の分位点回帰に関してだけ書く
+
+Conformalizedに関するところを書く
+
+近年では予測の際，外れ値の影響を受けやすい線形回帰に代わり，データの分位点を元に値が高確率で含まれる区間である予測区間を出力する分位点回帰(QR)や，この予測区間とデータの誤差を適合性スコアという尺度を用い評価し，それを元に区間の長さを調整するコンフォーマライズド分位点回帰(CQR)という手法が用いられている．
+またこれらをオンライン処理に対応させた，損失関数にピンボールロスのMoreau Envelope，分位関数に適応的カーネルフィルタを用いるオンライン分位点カーネル回帰(OQKR)，直近のデータが区間に含まれているか否かにより分位点の位置を変更することで分布のシフトに対応した適応的コンフォーマル予測(ACI)などの手法も存在し，オンライン処理に用いられている．
+本論文では，OQKRに途中で分布がシフトするデータセットを与え，どの程度誤差が生じるか，またこれをコンフォーマライズドさせることで誤差をどれほど改善できるかを，分布のシフトに対応した手法であるACIの結果と比較することで評価する．
+
+
+Roger Koenker and Gilbert Bassett Jr. Regression quantiles. Econometrica: Journal of the
+Econometric Society, pages 33–50, 1978.
+
+買う時は
+
+13日？
+23
+26
+
+シンB3読んで忘年会
+学生居室でもよさげ
+
+データがおかしくなっているので注意
+新しくデータ作られてない，大丈夫？
+
+0.95入れよう
+
+帰ってきたらfigure_observation見る
+
+/home/thinw/.local/lib/python3.10/site-packages/matplotlib/axes/_base.py:2539: UserWarning: Warning: converting a masked element to nan.
+  xys = np.asarray(xys)
+
+gamma_temp
+
++ '/\u03b3=' + str(gamma)
+
++ '/\u03b3=' + str(gamma) + '/ACI.npz'
+
+list_graph
+416.02
+
+ invalid value encountered in log10
+12/1までにやろうね
+高校受験を思い出せ！
+あの頃は何もしなかった
+エナドリは危険
+トイレめちゃ行きたくなる
+vestige
+
+ダブルエンジェルアルファリオン
+ドロマーエンコマ
+
+ボリス大丈夫？ACIにIntegrateがないみたいだけど
+
+今後はデータ数6000でやるのもいいかも
+GitHUbの調整もいいね
+予約メール
+
+type1ec.styの場所
+/mnt/c/texlive/2023/texmf-dist/tex/latex/cm-super/type1ec.sty
+export TEXINPUTS=".:/mnt/c/texlive/2023/texmf-dist/tex/latex/cm-super/:${TEXINPUTS}"
+
+2つ目の手法としては，マルチカーネルでやるというあれもある
+
+基本的に12時から18時半で
+6時間半で5時間をモットーに
+
+家帰ったら全体からカバレッジ考える番をやりたい
+
+朝はなんかプログラム実行してから始める
+
+トレーニングセットとキャリブレーションセットに分けるだけってのはどう？
+まずトレーニングセットで区間作って適合性スコア求める
+1500で
+1500じゃなくてもいい
+
+2つやり方がある
+1つは今までの方法
+2つは上に書いてある方法
+これ湯川先生に相談する？
+
+家帰ってからはスマホ控える
+夜9時まではアニメだけが娯楽
+
+Startの所を変える
+区間が長すぎ，なんとかしろ
+
+しゃべりたい
+→5秒我慢
+→なかったらはなそう
+
+赤単メラビート
+サバイバーは結構あり
+
+9時に始めたい
+学校行く場合は9時半から10時半
+
+面接は自分の事そのまんま言わない
+5時間たまらないと帰れない
+いいか，学校来てサボるのは一番非効率だぞ
+煮詰まった時は論文嫁
+プログラム作る時，○○2←これやめろ，スペース複数作って対応
+スマホをオフにするのと，ネットサーフィンしないのは効く
+○○する代わりに××する
+
+ここいる？
+→kernel_func[a, i] = np.dot(kernel_weight[a].T, self.kernel_vector_eval).reshape(-1)
+
+Figure5が使えそう
+RnageerrorもFigure6が使えそう
+
+実験の詳細を書くようにする
+提案手法でも追従できないようなデータセットを考える
+
+毎朝目標作ってそれをやれたら休めるのはどう？
+あとでやるタスク，年末調整，定期について書いておく
+
+Twitterは疲れるものである
+完璧なコード書かなくていい
+ネットに正解はありません
+頑張って出来ないのはしょうがないけど頑張る努力はしよう
+スマホ確認
+スケジュールを設定
+最初の1回は曲聞きながらやる
+
+どんな図を用意するか
+range_func_est
+
+カバレッジレート100回分比較
+レンジエラー100回分比
+実験手法について詳しく記述するとミスに気づけた
+
+Degrees of freedom <= 0 for slice return a.var(ddof=ddof, axis=axis)
+invalid value encountered in double_scalars
+
+from algorithms.online.gradient_descent import online_learning as grad
+
+    def calibrate(self, kernel_vector):
+        calib_func = np.zeros([len(self.alpha), self.Iter, len(self.output_train)])
+        for i in range(self.Iter):        
+            # Pinball Moreau
+            for a in range(len(self.alpha)):
+                calib_func[a, i] = np.dot(self.kernel_weight[a].T, kernel_vector).reshape(-1)
+        return calib_func
+
+無理な時は相談だ
+どういう感じに困っているのかとかを細かく相談
+コミュ障言い訳にして後回しにするとマジで時間消えるしいいことない
+
+RangeErrorについても考えるのが今週の目標
+目標に対してどういうアクションを取るかを説明するように
+
+416.02
+2.87
+
+1983/5/5
+2023/10/30
+ちゃんとほうれん草する
+
+method_all = ('NN', 'QRF', 'KQR', 'single_kernel', 'single_rff', 'multi_kernel', 'multi_rff',)
+method = 'single_kernel'
+methods = ('single_kernel', )
+
+# Loss function
+loss_all = ('pinball', 'pinball_moreau', 'pinball_smooth_relax', 'pinball_huberized', 'pmc_online', 'pmc_batch',)
+loss = 'pinball_moreau'
+losses = ('pinball_moreau',)
+
+## Gradient methods
+step_size = 0.001
+
+print(self.method['method'])  
+Kernel
+
+print(self.method['variable'])
+10.0
+
+print(self.dict_band)
+[0.1]
+
+
+unsuta
+[[1.000e+00]
+ [2.000e+00]
+ [3.000e+00]
+ ...
+ [1.998e+03]
+ [1.999e+03]
+ [2.000e+03]]
+
+基本の流れ
+Main2でPrelearningやlearning(loss=loss)を行う
+ここでground_truth=grd_truthを得る
+learn.eval(ground_truth=grd_truth)でカバレッジレート評価
+
+func_estがおかしい
+func_estはOptimizeにある
+func_est_finalで検索
+
+スシロー
+マリオワンダー ばね
+木曜はりんちゃんいるからそれまで頑張りたくない？
+夜にやりたいことやりまくる
+ベッド行くと脱出できない
+
+こちらはσは0.1である
+それに対し，
+
+grd_truthを得る
+PreLearningを行う
+Kernel_vectorにおいて，class Kernel()を行う
+dict_define(10)を行う
+カーネルを作成
+
+
+
+
+        self.kernel_vector = ol.kernel_vector(self.input_train)
+        self.kernel_vector_eval = ol.kernel_vector(self.input_test)
+ここが同じ値になるかどうか
+→ここは同じ値
+
+
+でかい休憩作らない
+おかしい所にはここがおかしいって書いた
+4ポモドーロ，つまり4時間
+まず実行，これ大事
+Main3からfor noisetypeを消しとこう
+ACIはひょっとしてConformalized出来てないのでは？(訝し)
+スプリットサイズ0.75でよくね？
+実は2でも行ける説ない？
+Ground＿ｔるｔｈは変える形で…
+
+'exp_data/dim=1/no/no/Iter=937/trial=1/data.npz'
+
+def eval(self, ground_truth)
+
+目的を忘れない
+→あくまで目的は分布のシフト
+
+output_test=observation['output_test'], 
+
+groundandsameって何？
+これを質問
+
+OutlierLateが全部統合したVerである
+
+!pip3 install setuptools numpy scipy scikit-learn cython
+!pip install git+https://git@github.com/Demangio/scikit-garden.git
+
+自分の意見を忌憚なく言うと嫌われる
+かといって周りに合わせるてもダメ
+沈黙…
+
+むつみ，朝ネット見るのはやめろ
+
+個人的メモ
+Configではデータの設定をしている(ここからOnline設定できそうでは？)
+config.trial 繰り返し回数
+
+Lterはデータの長さ
+これは関数に入れたい
+
+Configの# Loss functionでシングルカーネルとか指定可能
+
+ピンボールロスを構築する手法を出す
+Covを計算
+
+PinbollLossかNNには
+Epochがあるよ
+
+Pmcって何の略？
+
+evalもOptimizeにある，カバレッジ率を評価する関数
+func_estはOptimizeのLearningにある
+
+if str(loss_temp) == 'pinball':
+loss = eval('address.' + str(loss_temp))
+→coverage(func_est=self.func_est, output_test=self.output_test, alpha=self.alpha, Iter=self.Iter, method=self.method)
+→  for i in range(len(alpha)):
+  coverage_temp = np.where((func_est[i] - output_test.T > 0), 1, 0)
+  coverage[i] = np.sum(coverage_temp, axis=1) / len(coverage_temp[0])
+→
+
+
+
+
+loss['gamma'] = 0
+learn.learning(loss=loss)
+learn.eval(ground_truth=grd_truth)
+learn.save()
+                                        		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Loss関数を見る
+
+恐らく今はOnlineだと思われる
+
+Xtrain，Ytrainをピンボールロスにぶち込んで区間構築
+YCalとYtrainを比較
+alpa=alpha_range
+
+qUp = np.dot(np.array([1] + list(input[t, :])), Up_Array)
+        qLow = np.dot(np.array([1] + list(input[t, :])), Low_Array)
+これをよく確認しよう
+
+output_true_testこれどこででる？
+
+↓ファイル指定
+
+outlier_rateが大事
+
+↓outlier_rateがないのはこのせい？
+if __name__ == '__main__':
+    for i in range(config.trial):
+        data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1)
+        dt(data_path=data_path)
+
+
+for i in range(config.trial):
+                            data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/' 
+                            observation = np.load(data_path + 'outlier.npz')
+                            noise = np.load(data_path + 'noise.npz')
+                            data = np.load(data_path + 'data.npz')
+
+elif eval('address.' + str(method))['processing'] == 'online':でオンラインになる
+
+data_flag == 'on'でデータ作れそう
+
+outlier_rate=np.arange(6)=[0,1,2,3,4,5]
+
+index_alphaってどこにある？
+
+pmc_batch
+
+恐らく１０２行まではかんぺき～
+
+Primal_dual
+なんかこれが悪さしてそう
+kernel_func = np.zeros([len(self.alpha), self.Iter, len(self.output_train)])
+
+Main
+88ｰ92でデータを読み取り()
