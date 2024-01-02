@@ -13,7 +13,7 @@ import configuration.address as address
 import numpy as np
 # data 
 
-path = r'exp_data\dim=1\linear_expansion\sparse\outlier_rate=0.05\Iter=3000\trial=15\outlier.npz'
+path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=15/outlier.npz'
 data = np.load(path)
 output = data['output_test']
 with open('checkhi.csv', 'w') as f:

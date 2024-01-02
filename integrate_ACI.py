@@ -198,7 +198,7 @@ if __name__ == '__main__':
         data_path =  'result/text/dim=' + str(config.input_dim) + '/' + str(config.noise_type) + '/' + str(config.outlier_type) + '/=0.05' + '/Iter=' + str(config.Iter) + '/alpha=' + str(alpha_range) 
 
         for _, method in enumerate(config.methods):
-            #data_integrate(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
+            data_integrate(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
             #data_integratehal(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
             #data_integratelo(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
-            data_integratehi(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
+            #data_integratehi(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
