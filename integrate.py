@@ -226,7 +226,8 @@ def data_integrate_CQR(data_path, method, loss, gamma, trial=config.trial):
     cov_db_temp = np.zeros([trial, 3])
     cov_db_interval = np.zeros([3, 2])
     #input_neo = np.zeros([trial,config.Iter_CQR])
-    input_neo = np.zeros([trial,500])
+    neo = int(config.Iter/6)
+    input_neo = np.zeros([trial,neo])
 
     alpha_rel = 0.95
     deg_free = trial - 1
@@ -275,7 +276,8 @@ def data_integrate_CQRhi(data_path, method, loss, gamma, trial=config.trial):
     cov_db_temp = np.zeros([trial, 3])
     cov_db_interval = np.zeros([3, 2])
     #input_neo = np.zeros([trial,config.Iter_CQR])
-    input_neo = np.zeros([trial,500])
+    neo = int(config.Iter/6)
+    input_neo = np.zeros([trial,neo])
 
     alpha_rel = 0.95
     deg_free = trial - 1
@@ -327,7 +329,8 @@ def data_integrate_CQRlo(data_path, method, loss, gamma, trial=config.trial):
     cov_db_temp = np.zeros([trial, 3])
     cov_db_interval = np.zeros([3, 2])
     #input_neo = np.zeros([trial,config.Iter_CQR])
-    input_neo = np.zeros([trial,500])
+    neo = int(config.Iter/6)
+    input_neo = np.zeros([trial,neo])
 
     alpha_rel = 0.95
     deg_free = trial - 1
@@ -378,7 +381,8 @@ def data_integrate_CQRhal(data_path, method, loss, gamma, trial=config.trial):
     cov_db_temp = np.zeros([trial, 3])
     cov_db_interval = np.zeros([3, 2])
     #input_neo = np.zeros([trial,config.Iter_CQR])
-    input_neo = np.zeros([trial,500])
+    neo = int(config.Iter/6)
+    input_neo = np.zeros([trial,neo])
 
     alpha_rel = 0.95
     deg_free = trial - 1

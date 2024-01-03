@@ -10,9 +10,9 @@ def outlier_create_lo(input, output_true, noise_real, outlier_type):
         
     if outlier_type == 'sparse':
         arr = np.random.choice(Iter, size=size, replace=False)
-        zero = np.zeros((3000, 1))
+        zero = np.zeros((4500, 1))
         for s in arr:
-            zero[s] = -1 * np.sqrt(1000) * np.abs(np.random.normal(0, 1))
+            zero[s] = -1 * np.random.randint(10, 101)
         print(zero[s])    
         output = output + zero
         
@@ -34,9 +34,9 @@ def outlier_create_hi(input, output_true, noise_real, outlier_type):
         
     if outlier_type == 'sparse':
         arr = np.random.choice(Iter, size=size, replace=False)
-        zero = np.zeros((3000, 1))
+        zero = np.zeros((4500, 1))
         for s in arr:
-            zero[s] = np.sqrt(1000) * np.abs(np.random.normal(0, 1))
+            zero[s] = np.random.randint(10, 101)
         print(zero[s])    
         output = output + zero
         
@@ -59,11 +59,11 @@ def outlier_create_hal(input, output_true, noise_real, outlier_type):
     if outlier_type == 'sparse':
         arr = np.random.choice(Iter, size=size, replace=False)
         arr1, arr2 = np.array_split(arr, 2, 0)
-        zero = np.zeros((3000, 1))
+        zero = np.zeros((4500, 1))
         for s in arr1:
-            zero[s] =  np.sqrt(1000) * np.abs(np.random.normal(0, 1))
+            zero[s] =  np.random.randint(10, 101)
         for t in arr2:
-            zero[t] =  -1 * np.sqrt(1000) * np.abs(np.random.normal(0, 1))
+            zero[t] =  -1 * np.random.randint(10, 101)
         print(zero[s])    
         output = output + zero
         

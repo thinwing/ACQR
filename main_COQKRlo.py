@@ -70,6 +70,7 @@ elif config.optimize_flag == 'custom':
                 outlier_rate = 0.05
                 with open('log5.txt', 'a') as f:
                     f.write('\nlo')
+                    f.write('\nlo'+ str(config.step_size))
                     f.write('\nnoise_type : ' + str(noise_type))
                     f.write('\noutlier_type : ' + str(outlier_type))
                     f.write('\noutlier_rate : ' + str(outlier_rate))

@@ -2,7 +2,8 @@ import graph
 import data as dt
 import optimize
 import Optimize_CQR
-import Optimize_CQR2
+#import Optimize_CQR2
+import optimize_cqr4
 from integrate import data_integrate as integrate
 from integrate import data_integrate_CQRhi as integrate_CQR
 from algorithms.online.gradient_descent import online_learning as grad
@@ -70,6 +71,7 @@ elif config.optimize_flag == 'custom':
                 outlier_rate = 0.05
                 with open('log5.txt', 'a') as f:
                     f.write('\nhi')
+                    f.write('\n' + str(config.step_size))
                     f.write('\nnoise_type : ' + str(noise_type))
                     f.write('\noutlier_type : ' + str(outlier_type))
                     f.write('\noutlier_rate : ' + str(outlier_rate))
@@ -104,6 +106,8 @@ elif config.optimize_flag == 'custom':
                             elif eval('address.' + str(method))['processing'] == 'online':
                                 learn = Optimize_CQR.online_learning_hi(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
                                 grd = Optimize_CQR.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
+                                #learn = optimize_cqr4.online_learning_hi(observation=observation, noise=noise, data=data, alpha=alpha, method=eval('address.' + str(method)), trial=i+1, outlier_rate=outlier_rate)
+                                #grd = optimize_cqr4.gtCQR(data_path=learn.data_path, observation=observation, noise=noise, data=data, alpha=alpha)
                                 grd_truth = grd[1]
                                 
                                 #truth_path = 'exp_data/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=3000/trial=' + str(i+1) + '/outlier.npz'
