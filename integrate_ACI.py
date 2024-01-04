@@ -199,6 +199,6 @@ if __name__ == '__main__':
 
         for _, method in enumerate(config.methods):
             data_integrate(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
-            #data_integratehal(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
-            #data_integratelo(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
-            #data_integratehi(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
+            data_integratehal(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
+            data_integratelo(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
+            data_integratehi(data_path=data_path, method=method, loss=config.loss, gamma=config.gamma_default, trial=config.trial)
