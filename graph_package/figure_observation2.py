@@ -165,23 +165,29 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     
     # data install
     
-    data_path_temp = data_path + '/base/exp_data.npz'
+    data_path_tem = data_path + '/base/exp_data.npz'
+    data_path_temp = data_path_tem.replace('/trial', '/hi/trial')
     data = np.load(data_path_temp)
     
-    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hi/trial=1/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
     path = np.load(input_path)
-    print('path')
-    print(path.files)
-    path_test = path['input_te'][trial]
-    input_test = path_test.reshape(-1)
+    path_test = data['input_test']
+    input_te = path_test[2000:2500]
+    input_testc = input_te.reshape(-1)
+
+    input_test = path['input_te'].reshape(-1)
+    print(len(input_test))
 
     #output_test_true = data['output_true_test']
-    observation_test = data['observation_test']
+    observation = data['observation_test']
+    observation_test = observation[2000:2500]
     input_test_ord = np.argsort(input_test)
+    input_test_ordc = np.argsort(input_testc)
     
+    input_testc = np.sort(input_testc).reshape(-1)
     input_test = np.sort(input_test).reshape(-1)
     #output_test_true = output_test_true[input_test_ord].reshape(-1)
-    observation_test = observation_test[input_test_ord].reshape(-1)
+    observation_test = observation_test[input_test_ordc].reshape(-1)
         
     fig_size = np.array([12, 8])
     
@@ -193,7 +199,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     
     # ground_truth = np.load(ground_truth_path)
     # ground_truth_func = (ground_truth['func_est'])[:, input_test_ord]
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR/hi'
     mkdir(save_path, exist_ok=True)
     
     for index, item in enumerate(list_flatten):
@@ -206,15 +212,15 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         print(item)
     
         # get the path
-        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hi/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
 
         # load the data
         method = np.load(data_path_detail)
         print('method')
         print(method['func_est'])
-        method_func = (method['func_est'])[:, input_test_ord]
+        method_func = (method['func_est'])[:, input_test_ordc]
         
-        ax.scatter(input_test, observation_test, s=grp.dot_size, label='observation', color='green')
+        ax.scatter(input_testc, observation_test, s=grp.dot_size, label='observation', color='green')
         #ax.plot(input_test, output_test_true, label=r'true function $\psi$', color='black', linewidth=grp.linewidth, linestyle='dashed')
         ax.fill_between(input_test, method_func[0].reshape(-1), method_func[1].reshape(-1), label=str(eval('grp.' + str(item))['fig_name']), facecolor='red', alpha=0.4)
         # ax[index].plot(input_test, ground_truth_func[0], label='Ground truth : lower quantile', color='blue', linewidth=grp.linewidth, linestyle='dashed')
@@ -225,7 +231,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         ax.set_ylabel('$y$', fontsize=grp.font_size)
         
         #調整しよう
-        ax.set_ylim(-10, 10)
+        ax.set_ylim(-25, 25)
         ax.set_xlim(0, 1)
         
         ax.legend(fontsize=32)

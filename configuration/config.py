@@ -14,7 +14,7 @@ limit = 1
 input_dim = 1
 output_dim = 1
 # Iter = 20000
-Iter = 4500
+Iter = 3000
 Iter_CQR = int(Iter/3)# figure
 #Iter_a = 2000
 #Iter_b = 1000
@@ -112,7 +112,7 @@ gamma = 10.0 ** (np.arange(5) - 1)
 #gamma = np.array([100.0, 1000.0])
 #gamma = np.array([0.1])
 # gamma_conditional = 0.1
-gamma_default = 10.0
+gamma_default = 0.1
 #gamma_default = 0.5
 
 dict_band_single = np.array([0.1])

@@ -88,11 +88,11 @@ def gamma_coveragehal(data_path, loss_list, method='single_kernel', alpha=config
 
             result_coverage[index_gamma] = coverage[-1]
             print(result_coverage[index_gamma])
-        ax1.plot(gamma, result_coverage, label='ACI', color='green', linewidth=grp.linewidth, marker='s', markersize=grp.marker_size)
+        #ax1.plot(gamma, result_coverage, label='ACI', color='green', linewidth=grp.linewidth, marker='s', markersize=grp.marker_size)
     # proposed OCQKR               
         for index_gamma, gamma_temp in enumerate(gamma):
             # data load
-            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
+            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1500/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
             #'data_path_detail, _ = get_path_CQR(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
             
             print(data_path_detail)
@@ -105,7 +105,7 @@ def gamma_coveragehal(data_path, loss_list, method='single_kernel', alpha=config
     # proposed OCQMKR               
         for index_gamma, gamma_temp in enumerate(gamma):
             # data load
-            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
+            data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1500/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
             #'data_path_detail, _ = get_path_CQR(data_path=data_path_alpha, method=method, loss=item, gamma=gamma_temp)'
             
             print(data_path_detail)
@@ -205,12 +205,12 @@ def gamma_errorhal(data_path, loss_list, method='single_kernel', alpha=config.al
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 
                 result_coverage[index_gamma] = coverage[-1]
-            ax1.plot(gamma, result_coverage, label='ACI', color='green', linewidth=grp.linewidth, marker='s', markersize=grp.marker_size)
+            #ax1.plot(gamma, result_coverage, label='ACI', color='green', linewidth=grp.linewidth, marker='s', markersize=grp.marker_size)
         #ここまで追加パッチ
 # proposed OCQKR
             for index_gamma, gamma_temp in enumerate(gamma):
                 # data load
-                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
+                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1500/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/single_kernel.npz'
                 
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 
@@ -220,7 +220,7 @@ def gamma_errorhal(data_path, loss_list, method='single_kernel', alpha=config.al
 # proposed OCQKR
             for index_gamma, gamma_temp in enumerate(gamma):
                 # data load
-                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
+                data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1500/alpha=0.95/hal/online/pinball_moreau/' + '/\u03b3=' + str(gamma_temp) + '/CQR/multi_kernel.npz'
                 
                 method_result = np.load(data_path_detail)
                 coverage = method_result['coverage_db'][i] 

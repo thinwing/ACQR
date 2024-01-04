@@ -24,7 +24,7 @@ class _graph():
             #fig_rangeACI(data_path=data_path, trial = trial_temp, list=list)
 
             figCQR(data_path=data_path, trial = trial_temp, list=list)
-            fig_rangeCQR(data_path=data_path, trial = trial_temp, list=list)    
+            #fig_rangeCQR(data_path=data_path, trial = trial_temp, list=list)    
         
     def bo_coverage(self, list):
         alpha_coverage(data_path=self.data_path, list=list)
@@ -38,14 +38,14 @@ class _graph():
         #comp_proposed_range_ave(data_path=self.data_path, list=list, loss=loss, gamma=gamma)
         
     def o_gamma_coverage(self, loss_list, alpha, method='single_kernel'):
-        gamma_coverage(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
-        gamma_error(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_coverage(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_error(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         
-        gamma_coveragehi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
-        gamma_errorhi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_coveragehi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_errorhi(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         
-        gamma_coveragelo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
-        gamma_errorlo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_coveragelo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
+        #gamma_errorlo(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         
         gamma_coveragehal(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
         gamma_errorhal(data_path=self.data_path, loss_list=loss_list, method='single_kernel', alpha=alpha)
@@ -65,7 +65,7 @@ class _graph():
     
 if __name__ == '__main__':
     gr = _graph()
-    #gr.bo_figure(list=grp.list_graph, alpha=0.95)
+    gr.bo_figure(list=grp.list_graph, alpha=0.95)
 
     #gr.bo_coverage(list=grp.list_graph_coverage)    
     #for index, item in enumerate(grp.loss_list):
@@ -73,6 +73,6 @@ if __name__ == '__main__':
         #print(index + 1)
 
     #ここフォントの問題あり    
-    gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
+    #gr.o_gamma_coverage(loss_list=grp.loss_list, alpha=config.alpha_range, method=grp.list_graph_online)
     
     #gr.outlier_coverage(list=grp.list_graph_coverage)
