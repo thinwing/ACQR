@@ -1,7 +1,7 @@
 import numpy as np
 import os
-os.add_dll_directory(r"C:\Program Files\R\R-4.3.1\bin\x64")
-os.environ["R_HOME"]=r"C:\Program Files\R\R-4.3.1"
+#os.add_dll_directory(r"C:\Program Files\R\R-4.3.1\bin\x64")
+#os.environ["R_HOME"]=r"C:\Program Files\R\R-4.3.1"
 import rpy2.robjects as r2
 import rpy2.robjects.numpy2ri as npr
 from rpy2.robjects.packages import importr

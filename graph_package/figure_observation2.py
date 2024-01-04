@@ -166,10 +166,10 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     # data install
     
     data_path_tem = data_path + '/base/exp_data.npz'
-    data_path_temp = data_path_tem.replace('/trial', '/hi/trial')
+    data_path_temp = data_path_tem.replace('/trial', '/lo/trial')
     data = np.load(data_path_temp)
     
-    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hi/trial=1/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+    input_path = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/lo/trial=1/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
     path = np.load(input_path)
     path_test = data['input_test']
     input_te = path_test[2000:2500]
@@ -199,7 +199,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
     
     # ground_truth = np.load(ground_truth_path)
     # ground_truth_func = (ground_truth['func_est'])[:, input_test_ord]
-    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR/hi'
+    save_path = 'result/graph/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/trial=' + str(trial+1) +'/CQR/lo'
     mkdir(save_path, exist_ok=True)
     
     for index, item in enumerate(list_flatten):
@@ -212,7 +212,7 @@ def figCQR(data_path, trial , list=np.array([['same_range'],['ground_truth']]), 
         print(item)
     
         # get the path
-        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/hi/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
+        data_path_detail = 'result/text/dim=1/linear_expansion/sparse/outlier_rate=0.05/Iter=1000/alpha=0.95/lo/trial=' + str(trial + 1) + '/online/pinball_moreau' + '/\u03b3=' + str(config.gamma_default) + '/CQR/single_kernel.npz'
 
         # load the data
         method = np.load(data_path_detail)

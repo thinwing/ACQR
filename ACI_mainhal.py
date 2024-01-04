@@ -36,12 +36,12 @@ for noise_type in config.noise_types:
                 f.write('\n' +  str(index_alpha + 1) + ' / ' + str(len(alpha_all)) + ' : ' + str(alpha))
                 f.write('\n---------------------------------------------')
 
-            for i in range(18, config.trial):
+            for i in range(config.trial):
                 data_path = 'exp_data/' + 'dim=' + str(config.input_dim) + '/' + str(noise_type) + '/' + str(outlier_type) + '/outlier_rate=' + str(outlier_rate) + '/Iter=' + str(config.Iter) + '/trial=' + str(i+1) + '/hal/' 
                 observation = np.load(data_path + 'outlier.npz')
                 noise = np.load(data_path + 'noise.npz')
                 data = np.load(data_path + 'data.npz')
-                ACI_data = runACI(output=observation['output_test'], input=data['input_test'], alpha=alpha_all, alpha_range=alpha_range, step=0.005, tinit=1000, splitSize=0.5)
+                ACI_data = runACI(output=observation['output_test'], input=data['input_test'], alpha=alpha_all, alpha_range=alpha_range, step=0.005, tinit=2000, splitSize=0.5)
                 coverage = ACI_data[0]
                 input_ACI = ACI_data[1]
                 func_est_final = ACI_data[2]
