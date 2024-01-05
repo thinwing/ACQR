@@ -11,7 +11,6 @@ import optimize
 from integrate import data_integrate_hal as integrate
 from integrate import data_integrate_CQRhal as integrateCQR
 
-
 import datetime
 import configuration.config as config
 import configuration.graph_config as graph_config
